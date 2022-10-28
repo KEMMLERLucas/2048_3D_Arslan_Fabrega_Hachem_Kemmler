@@ -18,6 +18,30 @@ public class Jeu {
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
     }
+    void deplacerCasesLignes(Ligne l){
+
+    }
+    void deplacerCasesColonnes(List<Tuile> listTuiles){
+
+    }
+    void recupererHaut(){
+        ///TODO Récupère la liste de ligne dont le déplacement va être vers le haut
+    }
+    void recupererBas(){
+        ///TODO Récupère la liste de ligne dont le déplacement va être vers le bas
+    }
+    void recupererGauche(){
+        ///TODO Récupère la liste de ligne dont le déplacement va être vers la gauche
+    }
+    void recupererDroite(){
+        ///TODO Récupère la liste de ligne dont le déplacement va être vers la droite
+    }
+    void deplacerAvant(){
+        ///TODO Déplace les tuiles vers l'avant
+    }
+    void deplacerArrierre(){
+        ///TODO Déplace les tuiles vers l'arrière
+    }
 
     void retourArrierreTout(){
         if (peutRetournerArrierre){
