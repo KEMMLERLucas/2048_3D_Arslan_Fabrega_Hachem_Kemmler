@@ -1,6 +1,3 @@
 /.idea/
 projet.iml
-/src/conf/conf.init.dist
-/vendor/
-src/conf/webetu_conf.init.dist
 /nbproject/
