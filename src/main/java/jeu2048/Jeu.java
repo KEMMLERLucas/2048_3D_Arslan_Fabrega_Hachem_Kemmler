@@ -3,6 +3,7 @@ package jeu2048;
 import java.util.List;
 
 public class Jeu implements java.io.Serializable {
+    List<Observateur> listeObservateur;
     List<Grille> grilleList;
     transient boolean peutRetournerArrierre;
     int retourArrierre;
@@ -95,5 +96,15 @@ public class Jeu implements java.io.Serializable {
                 tuile.randomize();
             });
         });
+    }
+
+    void enregisterObservateur(Observateur o) {
+
+    }
+    void suprimerObservateur(Observateur o){
+
+    }
+    void notifierObservateur(Observateur o){
+
     }
 }
