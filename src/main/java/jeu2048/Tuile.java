@@ -50,9 +50,18 @@ public class Tuile implements java.io.Serializable {
     }
     void afficherTuile(){
         if(this.estVide){
-            System.out.print("[ ]");
+            System.out.print("[    ]");
         }else{
-            System.out.print("["+this.valeur+"]");
+            if(this.valeur<10){
+                System.out.print("[  "+this.valeur+" ]");
+            }else if(this.valeur<100){
+                System.out.print("[ "+this.valeur+" ]");
+            }
+            else if(this.valeur<1000){
+                System.out.print("[ "+this.valeur+"]");
+            }else if(this.valeur<10000){
+                System.out.print("["+this.valeur+"]");
+            }
         }
     }
 }

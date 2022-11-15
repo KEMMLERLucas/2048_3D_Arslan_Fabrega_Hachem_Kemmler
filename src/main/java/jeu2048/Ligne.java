@@ -17,18 +17,18 @@ public class Ligne implements java.io.Serializable  {
         return listTuiles.get(index);
     }
     public void afficherLigne(){
-        System.out.println("---------");
+        System.out.println("------------------");
         listTuiles.forEach(tuile -> {
            tuile.afficherTuile();
         });
         System.out.println();
     }
     public void afficherDerniereLigne(){
-        System.out.println("---------");
+        System.out.println("------------------");
         listTuiles.forEach(tuile -> {
             tuile.afficherTuile();
         });
         System.out.println();
-        System.out.println("---------");
+        System.out.println("------------------");
     }
 }
