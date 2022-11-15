@@ -20,13 +20,6 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille = tailleGrille;
     }
 
-    void deplacerCasesLignes(Ligne l) {
-
-    }
-
-    void deplacerCasesColonnes(List<Tuile> listTuiles) {
-
-    }
 
     void recupererHaut() {
         ///TODO Récupère la liste de ligne dont le déplacement va être vers le haut
@@ -46,31 +39,31 @@ public class Jeu implements java.io.Serializable {
 
     void deplacerAvant() {
         ///Décaler la grille 2 dans la 1, puis la grille 3 dans la 1
-        Grille grille2 =grilleList.get(1);
+        Grille grille2 = grilleList.get(1);
         for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 2 vers la grille 1
-            Ligne ligne=grille2.getLigne(i);
+            Ligne ligne = grille2.getLigne(i);
             for (int j = 0; j < tailleGrille; j++) {
-                Tuile tuile=ligne.getTuile(j);
-                boolean changer=changerTuileGrille(tuile, grilleList.get(0), i, j);
-                if(changer){
+                Tuile tuile = ligne.getTuile(j);
+                boolean changer = changerTuileGrille(tuile, grilleList.get(0), i, j);
+                if (changer) {
                     grilleList.get(1).getLigne(i).getTuile(j).setValeur(0);
                     grilleList.get(1).getLigne(i).getTuile(j).setEstVide(true);
                 }
             }
         }
         ///Maintenant, on essaie de déplacer la grille 3 vers la grille 1
-        Grille grille3 =grilleList.get(2);
+        Grille grille3 = grilleList.get(2);
         for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 3 vers la grille 1
-            Ligne ligne=grille3.getLigne(i);
+            Ligne ligne = grille3.getLigne(i);
             for (int j = 0; j < tailleGrille; j++) {
-                Tuile tuile=ligne.getTuile(j);
-                boolean changer=changerTuileGrille(tuile, grilleList.get(0), i, j);
-                if(changer){
+                Tuile tuile = ligne.getTuile(j);
+                boolean changer = changerTuileGrille(tuile, grilleList.get(0), i, j);
+                if (changer) {
                     grilleList.get(2).getLigne(i).getTuile(j).setValeur(0);
                     grilleList.get(2).getLigne(i).getTuile(j).setEstVide(true);
-                }else{
-                    changer=changerTuileGrille(tuile, grilleList.get(1), i, j);
-                    if(changer){
+                } else {
+                    changer = changerTuileGrille(tuile, grilleList.get(1), i, j);
+                    if (changer) {
                         grilleList.get(2).getLigne(i).getTuile(j).setValeur(0);
                         grilleList.get(2).getLigne(i).getTuile(j).setEstVide(true);
                     }
@@ -81,16 +74,16 @@ public class Jeu implements java.io.Serializable {
 
     void deplacerArrierre() {
         ///Décaler la grille 2 dans la 3, puis la grille 1 dans la 3
-        Grille grille2 =grilleList.get(1);
+        Grille grille2 = grilleList.get(1);
         grille2.afficherGrille();
         for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 2 vers la grille 3
-            Ligne ligne=grille2.getLigne(i);
+            Ligne ligne = grille2.getLigne(i);
             ligne.afficherLigne();
             for (int j = 0; j < tailleGrille; j++) {
-                Tuile tuile=ligne.getTuile(j);
-                if(tuile.getEstVide()==false){
-                    boolean changer=changerTuileGrille(tuile, grilleList.get(2), i, j);
-                    if(changer){
+                Tuile tuile = ligne.getTuile(j);
+                if (tuile.getEstVide() == false) {
+                    boolean changer = changerTuileGrille(tuile, grilleList.get(2), i, j);
+                    if (changer) {
                         grilleList.get(1).getLigne(i).getTuile(j).setValeur(0);
                         grilleList.get(1).getLigne(i).getTuile(j).setEstVide(true);
                     }
@@ -98,36 +91,55 @@ public class Jeu implements java.io.Serializable {
             }
         }
 
-      ///Maintenant, on essaie de déplacer la grille 1 vers la grille 2
-              Grille grille1 =grilleList.get(0);
-              for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 1 vers la grille 3
-                  Ligne ligne=grille1.getLigne(i);
-                  for (int j = 0; j < tailleGrille; j++) {
-                      Tuile tuile=ligne.getTuile(j);
-                      boolean changer=changerTuileGrille(tuile, grilleList.get(2), i, j);
-                      if(changer){
-                          grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
-                          grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
-                      }else{
-                          changer=changerTuileGrille(tuile, grilleList.get(1), i, j);
-                          if(changer){
-                              grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
-                              grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
-                          }
-                      }
-                  }
-              }
+        ///Maintenant, on essaie de déplacer la grille 1 vers la grille 2
+        Grille grille1 = grilleList.get(0);
+        for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 1 vers la grille 3
+            Ligne ligne = grille1.getLigne(i);
+            for (int j = 0; j < tailleGrille; j++) {
+                Tuile tuile = ligne.getTuile(j);
+                boolean changer = changerTuileGrille(tuile, grilleList.get(2), i, j);
+                if (changer) {
+                    grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
+                    grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
+                } else {
+                    changer = changerTuileGrille(tuile, grilleList.get(1), i, j);
+                    if (changer) {
+                        grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
+                        grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
+                    }
+                }
+            }
+        }
     }
-    boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ){
-        boolean changement=false;
-        Ligne ligne=grille.getLigne(posI);
-        if(ligne.getTuile(posJ).getValeur()==0 && tuile.getEstVide()==false){
+    void deplacerDroite() {
+        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+            Grille g = grilleList.get(i);
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
+                Ligne ligne = g.getLigne(j);
+                ligne.deplacerDroite();
+            }
+        }
+    }
+    void deplacerGauche() {
+        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+            Grille g = grilleList.get(i);
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
+                Ligne ligne = g.getLigne(j);
+                ligne.deplacerGauche();
+            }
+        }
+    }
+
+    boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ) {
+        boolean changement = false;
+        Ligne ligne = grille.getLigne(posI);
+        if (ligne.getTuile(posJ).getValeur() == 0 && tuile.getEstVide() == false) {
             ligne.getTuile(posJ).setValeur(tuile.getValeur());
             ligne.getTuile(posJ).setEstVide(false);
-            changement=true;
-        }else if(ligne.getTuile(posJ).getValeur()==tuile.getValeur()){
-                ligne.getTuile(posJ).setValeur(tuile.getValeur()*2);
-                changement=true;
+            changement = true;
+        } else if (ligne.getTuile(posJ).getValeur() == tuile.getValeur()) {
+            ligne.getTuile(posJ).setValeur(tuile.getValeur() * 2);
+            changement = true;
 
         }
         return changement;
@@ -164,8 +176,9 @@ public class Jeu implements java.io.Serializable {
                 ", tailleGrille=" + tailleGrille +
                 '}';
     }
+
     public void afficherJeuConsole() {
-        System.out.print("Score actuel :" + score+ "       " + "Score max :" + scoreMax);
+        System.out.print("Score actuel :" + score + "       " + "Score max :" + scoreMax);
         System.out.println();
         grilleList.forEach(grille -> {
             grille.afficherGrille();
@@ -183,10 +196,12 @@ public class Jeu implements java.io.Serializable {
     void enregisterObservateur(Observateur o) {
 
     }
-    void suprimerObservateur(Observateur o){
+
+    void suprimerObservateur(Observateur o) {
 
     }
-    void notifierObservateur(Observateur o){
+
+    void notifierObservateur(Observateur o) {
 
     }
 

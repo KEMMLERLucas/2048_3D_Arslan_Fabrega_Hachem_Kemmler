@@ -1,5 +1,7 @@
 package jeu2048;
 
+import java.util.Random;
+
 public class Tuile implements java.io.Serializable {
     int valeur;
     boolean estVide;
@@ -39,28 +41,54 @@ public class Tuile implements java.io.Serializable {
     boolean getEstVide() {
         return this.estVide;
     }
-    void randomize() {
-        if(Math.random()*2 == 0){
-            this.valeur=0;
-            this.estVide=true;
-        }else {
-            this.valeur = (int) (Math.random() * 2 + 1) * 2;
+
+    boolean randomize() {
+        boolean randomized = false;
+        if (!this.estVide || this.valeur != 0) return false;
+        int i = 1 + (int) Math.floor(Math.random() * 5);
+        if (i != 1) {
+            this.valeur = 0;
+            this.estVide = true;
+        } else {
+            if ((int) Math.floor(Math.random() * 2) == 1) {
+                this.valeur = 4;
+            } else {
+                this.valeur = 2;
+            }
+            this.estVide = false;
+            randomized = true;
+        }
+        return randomized;
+    }
+
+    void randomizeStart() {
+        int min = 1;
+        int max = 10;
+
+        Random random = new Random();
+
+        int value = random.nextInt(max + min) + min;
+        if (value == 1) {
+            this.valeur = 0;
+            this.estVide = true;
+        } else {
+            this.valeur = 2;
             this.estVide = false;
         }
     }
-    void afficherTuile(){
-        if(this.estVide){
+
+    void afficherTuile() {
+        if (this.estVide) {
             System.out.print("[    ]");
-        }else{
-            if(this.valeur<10){
-                System.out.print("[  "+this.valeur+" ]");
-            }else if(this.valeur<100){
-                System.out.print("[ "+this.valeur+" ]");
-            }
-            else if(this.valeur<1000){
-                System.out.print("[ "+this.valeur+"]");
-            }else if(this.valeur<10000){
-                System.out.print("["+this.valeur+"]");
+        } else {
+            if (this.valeur < 10) {
+                System.out.print("[  " + this.valeur + " ]");
+            } else if (this.valeur < 100) {
+                System.out.print("[ " + this.valeur + " ]");
+            } else if (this.valeur < 1000) {
+                System.out.print("[ " + this.valeur + "]");
+            } else if (this.valeur < 10000) {
+                System.out.print("[" + this.valeur + "]");
             }
         }
     }

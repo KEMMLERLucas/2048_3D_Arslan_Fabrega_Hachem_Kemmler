@@ -40,4 +40,8 @@ public class Grille implements java.io.Serializable {
             }
         }
     }
+
+    public List<Ligne> getListLignes() {
+        return listLignes;
+    }
 }
