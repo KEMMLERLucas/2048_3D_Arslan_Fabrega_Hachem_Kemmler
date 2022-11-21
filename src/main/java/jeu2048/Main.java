@@ -64,15 +64,15 @@ public class Main {
         }
         jeu = new Jeu(listGrilles, 0, TAILLEMAX);
 
-        Tuile t1 = new Tuile(0, true);
+        Tuile t1 = new Tuile(4, false);
         Tuile t2 = new Tuile(0, true);
         Tuile t3 = new Tuile(0, true);
 
-        Tuile t4 = new Tuile(2, false);
+        Tuile t4 = new Tuile(4, false);
         Tuile t5 = new Tuile(2, false);
-        Tuile t6 = new Tuile(4, true);
+        Tuile t6 = new Tuile(0, true);
 
-        Tuile t7 = new Tuile(0, true);
+        Tuile t7 = new Tuile(8, false);
         Tuile t8 = new Tuile(0, true);
         Tuile t9 = new Tuile(0, true);
         Tuile t10 = new Tuile(0, true);
@@ -145,11 +145,11 @@ public class Main {
                 switch (direction) {
                     case "Z":
                         System.out.println("Vous avez choisi de monter");
-                        //TODO Ajouter la fonction de déplacement vers le haut
+                        j1.deplacerHaut();
                         break;
                     case "S":
                         System.out.println("Vous avez choisi de descendre");
-                        //TODO Ajouter la fonction de déplacement vers le bas
+                        j1.deplacerBas();
                         break;
                     case "Q":
                         System.out.println("Vous avez choisi d'aller à gauche");
@@ -172,6 +172,30 @@ public class Main {
                         input.close();
                         playing.set(false);
                         break;
+                        case "P":
+                            System.out.println("Vous avez choisi de faire un mouvement aléatoire");
+                            int i = 1 + (int) Math.floor(Math.random() * 6);
+                            switch (i){
+                                case 1:
+                                    j1.deplacerHaut();
+                                    break;
+                                case 2:
+                                    j1.deplacerBas();
+                                    break;
+                                case 3:
+                                    j1.deplacerGauche();
+                                    break;
+                                case 4:
+                                    j1.deplacerDroite();
+                                    break;
+                                case 5:
+                                    j1.deplacerAvant();
+                                    break;
+                                case 6:
+                                    j1.deplacerArrierre();
+                                    break;
+                            }
+                            break;
                 }
                 boolean notRandomized = true;
                 while (true) {
@@ -197,9 +221,10 @@ public class Main {
                 });
             }
         } else {
-            l2.afficherLigne();
-            l2.deplacerDroite();
-            l2.afficherLigne();
+            j1.afficherJeuConsole();
+            System.out.println("Test de la fonction de déplacement vers le haut");
+            j1.deplacerBas();
+            j1.afficherJeuConsole();
         }
 
     }

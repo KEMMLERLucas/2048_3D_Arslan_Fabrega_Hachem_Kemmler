@@ -130,6 +130,61 @@ public class Jeu implements java.io.Serializable {
         }
     }
 
+    void deplacerHaut(){
+        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+            Grille g = grilleList.get(i);
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
+                List<Tuile> colonne=g.getColonne(j);
+                for(int k =0; k < tailleGrille; k++){
+                    Tuile tuile = colonne.get(k);
+                    if(!tuile.getEstVide()){
+                        if(k!=0 && colonne.get(k - 1).getEstVide()){
+                            colonne.get(k-1).setValeur(tuile.getValeur());
+                            colonne.get(k-1).setEstVide(false);
+                            tuile.setValeur(0);
+                            tuile.setEstVide(true);
+                        }else if(k!=0 && colonne.get(k-1).getValeur()==tuile.getValeur()){ /// Si les deux cases ont la même valeurs
+                            colonne.get(k-1).setValeur(tuile.getValeur()*2);
+                            colonne.get(k-1).setEstVide(false);
+                            tuile.setValeur(0);
+                            tuile.setEstVide(true);
+                            deplacerHaut();
+                        }
+                    }else{
+                        ///Nothing happens
+                    }
+                }
+            }
+        }
+    }
+    void deplacerBas(){
+        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+            Grille g = grilleList.get(i);
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
+                List<Tuile> colonne=g.getColonne(j);
+                for(int k = tailleGrille-1; k >= 0; k--){
+                    Tuile tuile = colonne.get(k);
+                    if(!tuile.getEstVide()){
+                        if(k!=tailleGrille-1 && colonne.get(k + 1).getEstVide()){
+                            colonne.get(k+1).setValeur(tuile.getValeur());
+                            colonne.get(k+1).setEstVide(false);
+                            tuile.setValeur(0);
+                            tuile.setEstVide(true);
+                        }else if(k!=tailleGrille-1 && colonne.get(k+1).getValeur()==tuile.getValeur()){ /// Si les deux cases ont la même valeurs
+                            colonne.get(k+1).setValeur(tuile.getValeur()*2);
+                            colonne.get(k+1).setEstVide(false);
+                            tuile.setValeur(0);
+                            tuile.setEstVide(true);
+                            deplacerBas();
+                        }
+                    }else{
+                        ///Nothing happens
+                    }
+                }
+            }
+        }
+    }
+
     boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ) {
         boolean changement = false;
         Ligne ligne = grille.getLigne(posI);
