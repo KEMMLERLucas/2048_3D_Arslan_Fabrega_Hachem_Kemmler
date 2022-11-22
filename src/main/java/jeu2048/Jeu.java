@@ -1,6 +1,8 @@
 package jeu2048;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Jeu implements java.io.Serializable {
     List<Observateur> listeObservateur;
@@ -130,55 +132,59 @@ public class Jeu implements java.io.Serializable {
         }
     }
 
-    void deplacerHaut(){
+    void deplacerBas(){
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
-            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
-                List<Tuile> colonne=g.getColonne(j);
-                for(int k =0; k < tailleGrille; k++){
-                    Tuile tuile = colonne.get(k);
-                    if(!tuile.getEstVide()){
-                        if(k!=0 && colonne.get(k - 1).getEstVide()){
-                            colonne.get(k-1).setValeur(tuile.getValeur());
-                            colonne.get(k-1).setEstVide(false);
-                            tuile.setValeur(0);
-                            tuile.setEstVide(true);
-                        }else if(k!=0 && colonne.get(k-1).getValeur()==tuile.getValeur()){ /// Si les deux cases ont la même valeurs
-                            colonne.get(k-1).setValeur(tuile.getValeur()*2);
-                            colonne.get(k-1).setEstVide(false);
-                            tuile.setValeur(0);
-                            tuile.setEstVide(true);
-                            deplacerHaut();
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la colonne
+                List<Tuile> colonne=g.getColonne(j); //on choisis la colonne j
+                boolean estFusionne=false;
+                for(int k = tailleGrille-1; k >= 0; k--){ //pour chaque élément de la colonne
+                    //On récupère la tuille à la place k de la colonne
+                    for(int l=k; l<tailleGrille; l++){ //on commence à la position K
+                        if(!colonne.get(l).getEstVide()&& l!=tailleGrille-1){
+                            Tuile tuileActuelle=colonne.get(l); // on vérifie qu'on est pas à droite et que la tuile n'est pas vide
+                            Tuile tuileDessous = colonne.get(l+1);
+                            if(tuileDessous.getEstVide()){
+                                tuileDessous.setValeur(tuileActuelle.getValeur());
+                                tuileDessous.setEstVide(false);
+                                tuileActuelle.etreVidee();
+                            }else if(tuileActuelle.getValeur()==tuileDessous.getValeur() && !estFusionne){ /// Si les deux cases ont la même valeurs
+                                tuileActuelle.etreVidee();
+                                tuileDessous.increment();
+                                estFusionne=true;
+                            }
+                        }else{
+                            ///Nothing happens
                         }
-                    }else{
-                        ///Nothing happens
                     }
                 }
             }
         }
     }
-    void deplacerBas(){
-        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+    void deplacerHaut(){
+for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
-            for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
-                List<Tuile> colonne=g.getColonne(j);
-                for(int k = tailleGrille-1; k >= 0; k--){
-                    Tuile tuile = colonne.get(k);
-                    if(!tuile.getEstVide()){
-                        if(k!=tailleGrille-1 && colonne.get(k + 1).getEstVide()){
-                            colonne.get(k+1).setValeur(tuile.getValeur());
-                            colonne.get(k+1).setEstVide(false);
-                            tuile.setValeur(0);
-                            tuile.setEstVide(true);
-                        }else if(k!=tailleGrille-1 && colonne.get(k+1).getValeur()==tuile.getValeur()){ /// Si les deux cases ont la même valeurs
-                            colonne.get(k+1).setValeur(tuile.getValeur()*2);
-                            colonne.get(k+1).setEstVide(false);
-                            tuile.setValeur(0);
-                            tuile.setEstVide(true);
-                            deplacerBas();
+            for (int j = 0; j < tailleGrille; j++) { //on choisis la colonne
+                List<Tuile> colonne=g.getColonne(j); //on choisis la colonne j
+                boolean estFusionnee=false;
+                for(int k = 0; k < tailleGrille; k++){ //pour chaque élément de la colonne
+                    //On récupère la tuille à la place k de la colonne
+                    for(int l=k; l>=0; l--){ //on commence à la position K
+                        if(!colonne.get(l).getEstVide()&& l!=0){
+                            Tuile tuileActuelle=colonne.get(l); // on vérifie qu'on est pas à droite et que la tuile n'est pas vide
+                            Tuile tuileDessus = colonne.get(l-1);
+                            if(tuileDessus.getEstVide()){
+                                tuileDessus.setValeur(tuileActuelle.getValeur());
+                                tuileDessus.setEstVide(false);
+                                tuileActuelle.etreVidee();
+                            }else if(tuileActuelle.getValeur()==tuileDessus.getValeur() && !estFusionnee){ /// Si les deux cases ont la même valeurs
+                                tuileActuelle.etreVidee();
+                                tuileDessus.increment();
+                                estFusionnee=true;
+                            }
+                        }else{
+                            ///Nothing happens
                         }
-                    }else{
-                        ///Nothing happens
                     }
                 }
             }
@@ -259,8 +265,36 @@ public class Jeu implements java.io.Serializable {
     void notifierObservateur(Observateur o) {
 
     }
-
+    public List<Tuile> getTuileVide(){
+        List<Tuile> tuileVide = new ArrayList<>();
+        grilleList.forEach(grille -> {
+            grille.getToutesLesTuiles().forEach(tuile -> {
+                if(tuile.getEstVide()){
+                    tuileVide.add(tuile);
+                }
+            });
+        });
+        return tuileVide;
+    }
     public List<Grille> getGrilleList() {
         return grilleList;
+    }
+
+    public void addRandomTile() {
+        while (true) {
+            AtomicBoolean randomized = new AtomicBoolean(false);
+            int i = (int) Math.floor(Math.random() * 3);
+            Grille grille = this.getGrilleList().get(i);
+            List<Tuile> tuilesVides=grille.getTuilesVide();
+            if(tuilesVides.isEmpty()) break;
+            tuilesVides.forEach(tuile -> {
+                if (!randomized.get()) {
+                    randomized.set(tuile.randomize());
+                }
+            });
+            if (randomized.get()) {
+                break;
+            }
+        }
     }
 }

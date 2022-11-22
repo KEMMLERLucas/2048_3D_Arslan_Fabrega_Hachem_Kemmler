@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
     public static void main(String[] args) {
-        boolean debugMode = true;
+        boolean debugMode = false;
 
 
         Jeu jeu;
@@ -24,11 +24,11 @@ public class Main {
                     nbTuileDebut++;
                 }
             }
-            if (i == 27 && nbTuileDebut == 0) {
+            if (i == nbTuile-2 && nbTuileDebut == 0) {
                 t.setValeur(2);
                 t.setEstVide(false);
             }
-            if (i == 28 && nbTuileDebut != nbTuileDebutMax) {
+            if (i == nbTuile-1 && nbTuileDebut != nbTuileDebutMax) {
                 t.setValeur(2);
                 t.setEstVide(false);
             }
@@ -64,17 +64,17 @@ public class Main {
         }
         jeu = new Jeu(listGrilles, 0, TAILLEMAX);
 
-        Tuile t1 = new Tuile(4, false);
+        Tuile t1 = new Tuile(0, true);
         Tuile t2 = new Tuile(0, true);
-        Tuile t3 = new Tuile(0, true);
+        Tuile t3 = new Tuile(4, false);
 
-        Tuile t4 = new Tuile(4, false);
-        Tuile t5 = new Tuile(2, false);
-        Tuile t6 = new Tuile(0, true);
+        Tuile t4 = new Tuile(0, true);
+        Tuile t5 = new Tuile(0, true);
+        Tuile t6 = new Tuile(2, false);
 
-        Tuile t7 = new Tuile(8, false);
+        Tuile t7 = new Tuile(0, true);
         Tuile t8 = new Tuile(0, true);
-        Tuile t9 = new Tuile(0, true);
+        Tuile t9 = new Tuile(2, false);
         Tuile t10 = new Tuile(0, true);
         Tuile t11 = new Tuile(0, true);
         Tuile t12 = new Tuile(0, true);
@@ -137,7 +137,7 @@ public class Main {
 
             j1.afficherJeuConsole();
             System.out.print("Pour se déplacer, utilisez les touches:" +
-                    " Z pour monter, S pour descendre, Q pour aller à gauche et D pour aller à droite, F pour l'étage supérieur et R pour l'étage inférieur. \n pour quitter, appuyez sur C");
+                    " Z pour monter, S pour descendre, Q pour aller à gauche et D pour aller à droite, F pour l'étage supérieur et R pour l'étage inférieur. Pour faire un mouvement aléatoire, appuyez sur P \n pour quitter, appuyez sur C");
             while (playing.get()) {
                 // takes input from the keyboard
                 String direction = input.nextLine().toUpperCase();
@@ -177,38 +177,40 @@ public class Main {
                             int i = 1 + (int) Math.floor(Math.random() * 6);
                             switch (i){
                                 case 1:
+                                    System.out.println("Vous êtes allés vers le haut");
                                     j1.deplacerHaut();
                                     break;
                                 case 2:
+                                    System.out.println("Vous êtes allés vers le bas");
                                     j1.deplacerBas();
                                     break;
                                 case 3:
+                                    System.out.println("Vous êtes allés vers la gauche");
                                     j1.deplacerGauche();
                                     break;
                                 case 4:
+                                    System.out.println("Vous êtes allés vers la droite");
                                     j1.deplacerDroite();
                                     break;
                                 case 5:
+                                    System.out.println("Vous êtes allés vers l'avant");
                                     j1.deplacerAvant();
                                     break;
                                 case 6:
+                                    System.out.println("Vous êtes allés vers l'arrière");
                                     j1.deplacerArrierre();
                                     break;
                             }
                             break;
                 }
-                boolean notRandomized = true;
-                while (true) {
-                    AtomicBoolean randomized = new AtomicBoolean(false);
-                    j1.getGrilleList().forEach(Grille -> Grille.getListLignes().forEach(Ligne -> Ligne.getListTuiles().forEach(Tuile -> {
-                        if (!randomized.get()) {
-                            randomized.set(Tuile.randomize());
-                        }
-                    })));
-                    if (randomized.get()) {
-                        break;
-                    }
+                int i = (int) Math.floor(Math.random() * 2);
+                if (i == 2) {
+                    j1.addRandomTile();
+                    j1.addRandomTile();
+                }else{
+                    j1.addRandomTile();
                 }
+                j1.addRandomTile();
 
                 j1.afficherJeuConsole();
                 j1.getGrilleList().forEach(grille -> {
@@ -223,7 +225,7 @@ public class Main {
         } else {
             j1.afficherJeuConsole();
             System.out.println("Test de la fonction de déplacement vers le haut");
-            j1.deplacerBas();
+            j1.deplacerHaut();
             j1.afficherJeuConsole();
         }
 

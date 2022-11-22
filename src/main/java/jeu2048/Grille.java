@@ -40,7 +40,17 @@ public class Grille implements java.io.Serializable {
             }
         }
     }
-
+    public List<Tuile> getTuilesVide(){
+        List<Tuile> listTuilesVide = new ArrayList<Tuile>();
+        for (Ligne ligne : listLignes) {
+            for (Tuile tuile : ligne.getListTuiles()) {
+                if (tuile.getEstVide()) {
+                    listTuilesVide.add(tuile);
+                }
+            }
+        }
+        return listTuilesVide;
+    }
     public List<Ligne> getListLignes() {
         return listLignes;
     }

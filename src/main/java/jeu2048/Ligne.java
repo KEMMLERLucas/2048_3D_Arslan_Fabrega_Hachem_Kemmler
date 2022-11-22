@@ -34,6 +34,7 @@ public class Ligne implements java.io.Serializable  {
         System.out.println("------------------");
     }
     public void deplacerGauche() {
+        boolean estFusionne = false;
         for (int i = 0; i < tailleMaxLigne; i++) {
             if (i == 0 && listTuiles.get(i).getEstVide()) {
                 ///Nothing happens
@@ -47,9 +48,10 @@ public class Ligne implements java.io.Serializable  {
                         caseGauche.setEstVide(false);
                         caseActuelle.setValeur(0);
                         caseActuelle.setEstVide(true);
-                    } else if (caseActuelle.getValeur() == caseGauche.getValeur()) { //Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
+                    } else if (caseActuelle.getValeur() == caseGauche.getValeur() && !estFusionne) { //Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
                         caseGauche.increment();
                         caseActuelle.etreVidee();
+                        estFusionne = true;
                     } else { //Si c'est pas vide, et qu'elle n'a pas la même valeur, on fait rien
                         break;
                     }
@@ -59,6 +61,7 @@ public class Ligne implements java.io.Serializable  {
         }
     }
     public void deplacerDroite(){
+        boolean estFusionnee=false;
         for (int i = tailleMaxLigne-1; i >= 0; i--) {
             if (i == tailleMaxLigne-1 && listTuiles.get(i).getEstVide()) {
                 ///Nothing happens
@@ -72,9 +75,10 @@ public class Ligne implements java.io.Serializable  {
                         caseDroite.setEstVide(false);
                         caseActuelle.setValeur(0);
                         caseActuelle.setEstVide(true);
-                    } else if (caseActuelle.getValeur() == caseDroite.getValeur()) { //Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
+                    } else if (caseActuelle.getValeur() == caseDroite.getValeur() && !estFusionnee) {//Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
                         caseDroite.increment();
                         caseActuelle.etreVidee();
+                        estFusionnee=true;
                     } else { //Si c'est pas vide, et qu'elle n'a pas la même valeur, on fait rien
                         break;
                     }
