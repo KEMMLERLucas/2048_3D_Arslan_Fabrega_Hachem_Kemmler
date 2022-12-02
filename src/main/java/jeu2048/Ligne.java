@@ -1,14 +1,23 @@
 package jeu2048;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Ligne implements java.io.Serializable  {
+public class Ligne implements java.io.Serializable {
     List<Tuile> listTuiles;
     int tailleMaxLigne;
 
     Ligne(List<Tuile> listTuiles) {
         this.listTuiles = listTuiles;
         this.tailleMaxLigne = listTuiles.size();
+    }
+
+    Ligne(Ligne ligne){
+        List<Tuile> copyLigne=new ArrayList<>();
+        ligne.getListTuiles().forEach(tuile ->
+              copyLigne.add(tuile.copy())  );
+        this.listTuiles=copyLigne;
+        this.tailleMaxLigne=ligne.tailleMaxLigne;
     }
 
     public List<Tuile> getListTuiles() {
@@ -87,4 +96,8 @@ public class Ligne implements java.io.Serializable  {
             }
         }
     }
+    public Ligne copy(){
+        return new Ligne(this);
+    }
+
 }

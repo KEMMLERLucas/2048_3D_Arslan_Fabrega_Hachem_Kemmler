@@ -1,17 +1,22 @@
 package jeu2048;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         boolean debugMode = false;
 
 
         Jeu jeu;
         int TAILLEMAX = 3;
         int nbTuileDebut = 0;
+        boolean retourEnCours=false;
+        boolean retourDejaFait=false;
+        boolean mouvementFait=false;
+        int countRetour=0;
         int nbTuileDebutMax = 2;
         int nbTuile = TAILLEMAX * TAILLEMAX * TAILLEMAX;
         int nbLigne = TAILLEMAX * TAILLEMAX;
@@ -107,37 +112,23 @@ public class Main {
         Grille g2 = new Grille(List.of(l4, l5, l6), 3);
         Grille g3 = new Grille(List.of(l7, l8, l9), 3);
         List<Grille> lg = List.of(g1, g2, g3);
-        //System.out.println("Grille 1");
-        //g1.afficherGrille();
-        //System.out.println();
-        //System.out.println("Grille 2");
-        //g2.afficherGrille();
-        //System.out.println();
-        //System.out.println("Grille 3");
-        //g3.afficherGrille();
         Jeu j1 = new Jeu(lg, 0, 3);
-        //j1.afficherJeuConsole();
-        /*j2.randomize();
-        j3.randomize();
-        j4.randomize();
-        j5.randomize();*/
-        List<Jeu> enCours = List.of(j1);
+        List<Jeu> enCours = new ArrayList<>();
+        Jeu copyJ1=j1.copy();
+
+        enCours.add(copyJ1);
         SerializerJeu sj = new SerializerJeu(enCours);
         sj.serialize();
-        DeserializerJeu dj = new DeserializerJeu();
-        List<Jeu> lj = dj.deserialize();
-        /// A voir si il ne faut pas tout faire dans la même classe (serialisation et deserilisation)
-        //lj.get(0).afficherJeuConsole();
 
         System.out.println("Bienvenue dans le 2048 3D");
         Scanner input = new Scanner(System.in);
         AtomicBoolean playing = new AtomicBoolean(true);
 
         if (!debugMode) {
-
+            mouvementFait=false;
             j1.afficherJeuConsole();
             System.out.print("Pour se déplacer, utilisez les touches:" +
-                    " Z pour monter, S pour descendre, Q pour aller à gauche et D pour aller à droite, F pour l'étage supérieur et R pour l'étage inférieur. Pour faire un mouvement aléatoire, appuyez sur P \n pour quitter, appuyez sur C");
+                    " Z pour monter, S pour descendre, Q pour aller à gauche et D pour aller à droite, F pour l'étage supérieur et R pour l'étage inférieur. \nPour faire un mouvement aléatoire, appuyez sur P, et faire un retour arrière, L. \n Pour quitter, appuyez sur C");
             while (playing.get()) {
                 // takes input from the keyboard
                 String direction = input.nextLine().toUpperCase();
@@ -146,26 +137,67 @@ public class Main {
                     case "Z":
                         System.out.println("Vous avez choisi de monter");
                         j1.deplacerHaut();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
                         break;
                     case "S":
                         System.out.println("Vous avez choisi de descendre");
                         j1.deplacerBas();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
                         break;
                     case "Q":
                         System.out.println("Vous avez choisi d'aller à gauche");
                         j1.deplacerGauche();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
                         break;
                     case "D":
                         System.out.println("Vous avez choisi d'aller à droite");
                         j1.deplacerDroite();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
                         break;
                     case "F":
                         System.out.println("Vous avez choisi d'aller à l'étage supérieur");
                         j1.deplacerAvant();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
                         break;
                     case "R":
                         System.out.println("Vous avez choisi d'aller à l'étage inférieur");
                         j1.deplacerArrierre();
+                        mouvementFait = true;
+                        if(retourEnCours){
+                            retourDejaFait=true;
+                            retourEnCours=false;
+                        }
+                        break;
+                    case "L":
+                        if(retourDejaFait || countRetour==enCours.size()-1 || enCours.size()==1 ){
+                            System.out.println("Impossible de faire un retour arrière");
+                            break;
+                        }
+                        System.out.println("Vous avez choisi de faire un retour en arrière");
+                        countRetour++;
+                        retourEnCours=true;
+                        Jeu jeuTemp=enCours.get(countRetour);
+                        j1.remplacerJeu(jeuTemp.grilleList, jeuTemp.score);
                         break;
                     case "C":
                         System.out.println("Vous avez choisi de quitter");
@@ -203,16 +235,29 @@ public class Main {
                             }
                             break;
                 }
-                int i = (int) Math.floor(Math.random() * 2);
-                if (i == 2) {
-                    j1.addRandomTile();
-                    j1.addRandomTile();
-                }else{
-                    j1.addRandomTile();
+                if(!retourEnCours) {
+                    int i = (int) Math.floor(Math.random() * 2);
+                    if (i == 2) {
+                        j1.addRandomTile();
+                        j1.addRandomTile();
+                    }else{
+                        j1.addRandomTile();
+                    }
                 }
-                j1.addRandomTile();
 
-                j1.afficherJeuConsole();
+                if(mouvementFait && !retourEnCours) {
+                    enCours.add(j1.copy());
+                    //sj.addJeu(j1.copy());
+                    System.out.println("Taille sj " +enCours.size());
+                    enCours.forEach(Jeu::afficherJeuConsole);
+                    if(enCours.size()>=5){
+                        enCours.remove(0);
+                    }
+                }
+
+                sj.serialize();
+
+                //j1.afficherJeuConsole();
                 j1.getGrilleList().forEach(grille -> {
                     grille.getToutesLesTuiles().forEach(tuile -> {
                         if (tuile.getValeur() == 2048) {
@@ -222,11 +267,8 @@ public class Main {
                     });
                 });
             }
+
         } else {
-            j1.afficherJeuConsole();
-            System.out.println("Test de la fonction de déplacement vers le haut");
-            j1.deplacerHaut();
-            j1.afficherJeuConsole();
         }
 
     }

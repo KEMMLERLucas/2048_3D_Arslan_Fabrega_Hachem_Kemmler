@@ -10,6 +10,10 @@ public class Tuile implements java.io.Serializable {
         this.valeur = valeur;
         this.estVide = estVide;
     }
+    public Tuile(Tuile tuile){
+        this.valeur=tuile.valeur;
+        this.estVide=tuile.estVide;
+    }
 
     void etreVidee() {
         this.estVide = true;
@@ -91,5 +95,8 @@ public class Tuile implements java.io.Serializable {
                 System.out.print("[" + this.valeur + "]");
             }
         }
+    }
+    public Tuile copy(){
+        return new Tuile(this);
     }
 }

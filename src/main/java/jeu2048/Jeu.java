@@ -1,10 +1,12 @@
 package jeu2048;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.lang.Cloneable;
 
-public class Jeu implements java.io.Serializable {
+public class Jeu implements Serializable {
     List<Observateur> listeObservateur;
     List<Grille> grilleList;
     transient boolean peutRetournerArrierre;
@@ -20,6 +22,16 @@ public class Jeu implements java.io.Serializable {
         this.score = score;
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
+    }
+    Jeu(Jeu jeu){
+        List<Grille> copyGrilles=new ArrayList<>();
+        jeu.getGrilleList().forEach(grille ->
+                copyGrilles.add(grille.copy()));
+        this.grilleList=copyGrilles;
+        this.retourArrierre=jeu.retourArrierre;
+        this.score=jeu.score;
+        this.scoreMax=jeu.scoreMax;
+        this.tailleGrille=jeu.tailleGrille;
     }
 
 
@@ -297,4 +309,23 @@ for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             }
         }
     }
+    public void remplacerJeu(List<Grille> grilleList,int score){
+        this.grilleList=grilleList;
+        this.score=score;
+        this.afficherJeuConsole();
+    }
+    public  void remplacerJeuEntier(List<Grille> grilleList,int score, int retourArrierre,int scoreMax, int tailleGrille, boolean peutRetournerArrierre) {
+        this.grilleList=grilleList;
+        this.score=score;
+        this.retourArrierre=retourArrierre;
+        this.scoreMax=scoreMax;
+        this.tailleGrille=tailleGrille;
+        this.peutRetournerArrierre=peutRetournerArrierre;
+
+
+    }
+    public Jeu copy(){
+        return new Jeu(this);
+    }
+
 }

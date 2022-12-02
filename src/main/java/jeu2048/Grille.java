@@ -1,9 +1,10 @@
 package jeu2048;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Grille implements java.io.Serializable {
+public class Grille implements Serializable {
     List<Ligne> listLignes;
     int tailleMaxGrille;
 
@@ -14,6 +15,16 @@ public class Grille implements java.io.Serializable {
 
     public Ligne getLigne(int index) {
         return listLignes.get(index);
+    }
+
+    Grille(Grille grille){
+        List<Ligne> copyGrille=new ArrayList<>();
+        grille.getListLignes().forEach(ligne -> {
+            copyGrille.add(ligne.copy());
+        });
+        this.listLignes=copyGrille;
+        this.tailleMaxGrille=grille.tailleMaxGrille;
+
     }
 
     public List<Tuile> getColonne(int indexColonne) {
@@ -53,5 +64,8 @@ public class Grille implements java.io.Serializable {
     }
     public List<Ligne> getListLignes() {
         return listLignes;
+    }
+    public Grille copy(){
+        return new Grille(this);
     }
 }
