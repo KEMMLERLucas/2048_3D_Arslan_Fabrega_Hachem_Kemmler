@@ -3,16 +3,12 @@ package jeu2048;
 import java.util.Random;
 
 public class Tuile implements java.io.Serializable {
-    int valeur;
-    boolean estVide;
+    private int valeur;
+    private boolean estVide;
 
     public Tuile(int valeur, boolean estVide) {
         this.valeur = valeur;
         this.estVide = estVide;
-    }
-    public Tuile(Tuile tuile){
-        this.valeur=tuile.valeur;
-        this.estVide=tuile.estVide;
     }
 
     void etreVidee() {
@@ -38,7 +34,7 @@ public class Tuile implements java.io.Serializable {
         this.estVide = estVide;
     }
 
-    int getValeur() {
+    public int getValeur() {
         return this.valeur;
     }
 
@@ -96,7 +92,5 @@ public class Tuile implements java.io.Serializable {
             }
         }
     }
-    public Tuile copy(){
-        return new Tuile(this);
-    }
+
 }

@@ -1,4 +1,4 @@
-module test {
+module jeu2048 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -10,6 +10,6 @@ module test {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
-    opens test to javafx.fxml;
-    exports test;
+    opens jeu2048 to javafx.fxml;
+    exports jeu2048;
 }

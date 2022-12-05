@@ -1,9 +1,9 @@
-package test;
+package jeu2048;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class testControler {
     @FXML
     private Label welcomeText;
 

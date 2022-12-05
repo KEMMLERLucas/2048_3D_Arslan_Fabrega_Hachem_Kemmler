@@ -33,11 +33,9 @@ public class SerializerJeu {
     public void addJeu(Jeu jeu) {
         if(jeux.size()<5){
             jeux.add(jeu);
-            this.serialize();
         }else{
             jeux.remove(0);
             jeux.add(jeu);
-            this.serialize();
         }
     }
     public void setJeu(List<Jeu> jeux) {
@@ -46,9 +44,5 @@ public class SerializerJeu {
 
     public List<Jeu> getJeu() {
         return jeux;
-    }
-
-    public void changeJeuList(List<Jeu> enCours) {
-        this.jeux = enCours;
     }
 }
