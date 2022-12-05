@@ -3,8 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jeu2048.JeuController">
    <children>
-      <Label layoutX="61.0" layoutY="54.0" text="TEST TEST TEST" textFill="#cd0a0a" />
+      <Button layoutX="253.0" layoutY="187.0" mnemonicParsing="false" text="Jouer 2048-3D" onAction="#chargerJeu"/>
    </children>
 </AnchorPane>
