@@ -22,6 +22,9 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille = tailleGrille;
     }
 
+    public List<Grille> getGrille(){
+        return grilleList;
+    }
 
     void recupererHaut() {
         ///TODO Récupère la liste de ligne dont le déplacement va être vers le haut

@@ -3,8 +3,9 @@ package jeu2048;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import jeu2048.vue.VueGrille;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,8 +14,20 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JeuController {
+    public void afficherJeu(Jeu jeu) throws IOException {
+        Stage stage = Main.getStagePrincipal();
+        GridPane grid = new GridPane();
+        List<Grille> Grilles =  jeu.getGrille();
+        grid.add(VueGrille.dessinerGrille(Grilles.get(0)),0,0);
+        grid.add(VueGrille.dessinerGrille(Grilles.get(1)),1,0);
+        grid.add(VueGrille.dessinerGrille(Grilles.get(2)),2,0);
+        Scene scene = new Scene(grid);
+        stage.setScene(scene);
+        stage.show();
+
+    }
     @FXML
-    public void chargerJeu(){
+    public void chargerJeu() {
         Stage stage = Main.getStagePrincipal();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("VueJeu.fxml"));
         try {
@@ -150,6 +163,11 @@ public class JeuController {
         System.out.println("Bienvenue dans le 2048 3D");
         Scanner input = new Scanner(System.in);
         AtomicBoolean playing = new AtomicBoolean(true);
+        try {
+            afficherJeu(j1);
+        } catch (IOException e){
+            System.out.println(e);
+        }
 
         /**if (!debugMode) {
 
@@ -245,12 +263,5 @@ public class JeuController {
          j1.deplacerHaut();
          j1.afficherJeuConsole();
          }*/
-    }
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
     }
 }
