@@ -10,12 +10,12 @@ public class VueCase {
 
     public Node dessinerTuile(Tuile t){
         Canvas tuile = new Canvas();
-        tuile.setHeight(50.0);
-        tuile.setWidth(50.0);
+        tuile.setHeight(75.0);
+        tuile.setWidth(75.0);
         GraphicsContext gc = tuile.getGraphicsContext2D();
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, 50, 50);
-        gc.strokeText(String.valueOf(t.getValeur()), 5, 25);
+        gc.fillRect(5, 5, 75, 75);
+        gc.strokeText(String.valueOf(t.getValeur()), 30, 40);
         return tuile;
     }
 }

@@ -22,6 +22,15 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille = tailleGrille;
     }
 
+    Jeu(List<Grille> grilleList, Boolean retourArr, int nbrRetArr, int score, int tailleGrille) {
+        this.grilleList = grilleList;
+        this.peutRetournerArrierre = retourArr;
+        this.retourArrierre = 5;
+        this.score = score;
+        this.scoreMax = 2048;
+        this.tailleGrille = tailleGrille;
+    }
+
     public List<Grille> getGrille(){
         return grilleList;
     }
@@ -165,7 +174,7 @@ public class Jeu implements java.io.Serializable {
         }
     }
     void deplacerHaut(){
-for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
+        for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
             for (int j = 0; j < tailleGrille; j++) { //on choisis la colonne
                 List<Tuile> colonne=g.getColonne(j); //on choisis la colonne j
@@ -299,5 +308,20 @@ for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
                 break;
             }
         }
+    }
+    public boolean isPeutRetournerArrierre() {
+        return peutRetournerArrierre;
+    }
+
+    public int getRetourArrierre() {
+        return retourArrierre;
+    }
+
+    public int getTailleGrille() {
+        return tailleGrille;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

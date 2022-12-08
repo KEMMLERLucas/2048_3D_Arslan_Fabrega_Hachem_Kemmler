@@ -1,9 +1,14 @@
 package jeu2048;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import jeu2048.vue.VueGrille;
 
@@ -14,31 +19,35 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JeuController {
-    public void afficherJeu(Jeu jeu) throws IOException {
-        Stage stage = Main.getStagePrincipal();
-        GridPane grid = new GridPane();
-        List<Grille> Grilles =  jeu.getGrille();
-        grid.add(VueGrille.dessinerGrille(Grilles.get(0)),0,0);
-        grid.add(VueGrille.dessinerGrille(Grilles.get(1)),1,0);
-        grid.add(VueGrille.dessinerGrille(Grilles.get(2)),2,0);
-        Scene scene = new Scene(grid);
-        stage.setScene(scene);
-        stage.show();
-
-    }
-    @FXML
-    public void chargerJeu() {
-        Stage stage = Main.getStagePrincipal();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("VueJeu.fxml"));
+    public void afficherJeu(Jeu jeu) {
         try {
-            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = Main.getStagePrincipal();
+            stage.setMinHeight(480);
+            stage.setMinWidth(720);
+            GridPane grid = new GridPane();
+            List<Grille> Grilles = jeu.getGrille();
+            grid.add(VueGrille.dessinerGrille(Grilles.get(0)), 0, 0);
+            grid.add(VueGrille.dessinerGrille(Grilles.get(1)), 1, 0);
+            grid.add(VueGrille.dessinerGrille(Grilles.get(2)), 2, 0);
+            FXMLLoader fxmlLoaderControle = new FXMLLoader(Main.class.getResource("controle.fxml"));
+            Node controle = fxmlLoaderControle.load();
+            AnchorPane root = new AnchorPane();
+            root.setMinSize(720,480);
+            AnchorPane.setTopAnchor(grid, 150.0);
+            AnchorPane.setBottomAnchor(controle, 0.0);
             stage.setTitle("2048-3D!");
+            root.getChildren().add(grid);
+            root.getChildren().add(controle);
+            Scene scene = preparerScene(root, jeu);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
+    }
 
+    @FXML
+    public void chargerJeu() throws IOException {
         boolean debugMode = false;
         Jeu jeu;
         int TAILLEMAX = 3;
@@ -55,11 +64,11 @@ public class JeuController {
                     nbTuileDebut++;
                 }
             }
-            if (i == nbTuile-2 && nbTuileDebut == 0) {
+            if (i == nbTuile - 2 && nbTuileDebut == 0) {
                 t.setValeur(2);
                 t.setEstVide(false);
             }
-            if (i == nbTuile-1 && nbTuileDebut != nbTuileDebutMax) {
+            if (i == nbTuile - 1 && nbTuileDebut != nbTuileDebutMax) {
                 t.setValeur(2);
                 t.setEstVide(false);
             }
@@ -163,11 +172,8 @@ public class JeuController {
         System.out.println("Bienvenue dans le 2048 3D");
         Scanner input = new Scanner(System.in);
         AtomicBoolean playing = new AtomicBoolean(true);
-        try {
-            afficherJeu(j1);
-        } catch (IOException e){
-            System.out.println(e);
-        }
+
+        afficherJeu(j1);
 
         /**if (!debugMode) {
 
@@ -263,5 +269,57 @@ public class JeuController {
          j1.deplacerHaut();
          j1.afficherJeuConsole();
          }*/
+    }
+
+    public Scene preparerScene(Pane root, Jeu jeu) {
+        Scene scene = new Scene(root);
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case Z:
+                        jeu.deplacerHaut();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                    case S:
+                        jeu.deplacerBas();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                    case D:
+                        jeu.deplacerDroite();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                    case Q:
+                        jeu.deplacerGauche();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                    case F:
+                        jeu.deplacerArrierre();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                    case R:
+                        jeu.deplacerAvant();
+                        ajouterCase(jeu);
+                        afficherJeu(jeu);
+                        break;
+                }
+            }
+        });
+        return scene;
+    }
+
+    public void ajouterCase(Jeu jeu) {
+        int i = (int) Math.floor(Math.random() * 2);
+        if (i == 2) {
+            jeu.addRandomTile();
+            jeu.addRandomTile();
+        } else {
+            jeu.addRandomTile();
+        }
     }
 }

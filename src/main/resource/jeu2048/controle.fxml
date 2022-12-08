@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="84.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jeu2048.JeuController">
+   <children>
+      <Button layoutX="54.0" layoutY="1.0" mnemonicParsing="false" text="Haut"/>
+      <Button layoutX="61.0" layoutY="53.0" mnemonicParsing="false" text="Bas" />
+      <Button layoutY="14.0" mnemonicParsing="false" text="Gauche" />
+      <Button layoutX="96.0" layoutY="27.0" mnemonicParsing="false" text="Droite" />
+      <Button layoutX="95.0" layoutY="1.0" mnemonicParsing="false" text="Avant" />
+      <Button layoutX="7.0" layoutY="44.0" mnemonicParsing="false" text="Arrière" />
+      <Button layoutX="212.0" layoutY="31.0" mnemonicParsing="false" text="Coup aléatoire" />
+      <Button layoutX="328.0" layoutY="29.0" mnemonicParsing="false" text="laisser fini IA" />
+      <Button layoutX="478.0" layoutY="29.0" mnemonicParsing="false" text="Rool Back" />
+   </children>
+</AnchorPane>
