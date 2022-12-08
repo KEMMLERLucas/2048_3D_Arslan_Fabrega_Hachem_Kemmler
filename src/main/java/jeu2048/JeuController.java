@@ -5,10 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import jeu2048.vue.VueGrille;
 
@@ -21,23 +23,34 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class JeuController {
     public void afficherJeu(Jeu jeu) {
         try {
+            //preparation du stage
             Stage stage = Main.getStagePrincipal();
             stage.setMinHeight(480);
             stage.setMinWidth(720);
+            //preparation de la grille
             GridPane grid = new GridPane();
             List<Grille> Grilles = jeu.getGrille();
             grid.add(VueGrille.dessinerGrille(Grilles.get(0)), 0, 0);
             grid.add(VueGrille.dessinerGrille(Grilles.get(1)), 1, 0);
             grid.add(VueGrille.dessinerGrille(Grilles.get(2)), 2, 0);
+            //preparation des controle
             FXMLLoader fxmlLoaderControle = new FXMLLoader(Main.class.getResource("controle.fxml"));
             Node controle = fxmlLoaderControle.load();
+            //preparation du score
+            Label score = new Label("Score : "+jeu.getScore());
+            score.setFont(new Font("Arial",50));
+            System.out.println(jeu.getScore());
+            //mise en commun du tous
             AnchorPane root = new AnchorPane();
             root.setMinSize(720,480);
+            root.setStyle("-fx-background-color: #555151;");
+            AnchorPane.setTopAnchor(score,30.0);
             AnchorPane.setTopAnchor(grid, 150.0);
             AnchorPane.setBottomAnchor(controle, 0.0);
             stage.setTitle("2048-3D!");
             root.getChildren().add(grid);
             root.getChildren().add(controle);
+            root.getChildren().add(score);
             Scene scene = preparerScene(root, jeu);
             stage.setScene(scene);
             stage.show();
@@ -47,7 +60,7 @@ public class JeuController {
     }
 
     @FXML
-    public void chargerJeu() throws IOException {
+    public void chargerJeu(){
         boolean debugMode = false;
         Jeu jeu;
         int TAILLEMAX = 3;
