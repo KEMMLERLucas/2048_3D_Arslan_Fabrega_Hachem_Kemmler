@@ -1,5 +1,6 @@
 package jeu2048;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ligne implements java.io.Serializable  {
@@ -10,6 +11,15 @@ public class Ligne implements java.io.Serializable  {
         this.listTuiles = listTuiles;
         this.tailleMaxLigne = listTuiles.size();
     }
+
+    Ligne(Ligne ligne){
+        List<Tuile> copyLigne=new ArrayList<>();
+        ligne.getListTuiles().forEach(tuile ->
+                copyLigne.add(tuile.copy())  );
+        this.listTuiles=copyLigne;
+        this.tailleMaxLigne=ligne.tailleMaxLigne;
+    }
+
 
     public List<Tuile> getListTuiles() {
         return listTuiles;
@@ -33,7 +43,10 @@ public class Ligne implements java.io.Serializable  {
         System.out.println();
         System.out.println("------------------");
     }
-    public void deplacerGauche() {
+    public Object[] deplacerGauche() {
+        boolean merge = false;
+        Object[] tabToReturn = new Object[2];
+        int scoreToAdd=0;
         boolean estFusionne = false;
         for (int i = 0; i < tailleMaxLigne; i++) {
             if (i == 0 && listTuiles.get(i).getEstVide()) {
@@ -48,7 +61,10 @@ public class Ligne implements java.io.Serializable  {
                         caseGauche.setEstVide(false);
                         caseActuelle.setValeur(0);
                         caseActuelle.setEstVide(true);
+                        merge=true;
                     } else if (caseActuelle.getValeur() == caseGauche.getValeur() && !estFusionne) { //Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
+                        scoreToAdd+=caseGauche.getValeur()*2;
+                        merge=true;
                         caseGauche.increment();
                         caseActuelle.etreVidee();
                         estFusionne = true;
@@ -59,8 +75,15 @@ public class Ligne implements java.io.Serializable  {
                 }
             }
         }
+        tabToReturn[0]=merge;
+        tabToReturn[1]=scoreToAdd;
+        return tabToReturn;
     }
-    public void deplacerDroite(){
+    public Object[] deplacerDroite(){
+        boolean merge = false;
+        Object[] tabToReturn = new Object[2];
+        int scoreToAdd=0;
+
         boolean estFusionnee=false;
         for (int i = tailleMaxLigne-1; i >= 0; i--) {
             if (i == tailleMaxLigne-1 && listTuiles.get(i).getEstVide()) {
@@ -75,7 +98,10 @@ public class Ligne implements java.io.Serializable  {
                         caseDroite.setEstVide(false);
                         caseActuelle.setValeur(0);
                         caseActuelle.setEstVide(true);
+                        merge=true;
                     } else if (caseActuelle.getValeur() == caseDroite.getValeur() && !estFusionnee) {//Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
+                        scoreToAdd+=caseDroite.getValeur()*2;
+                        merge=true;
                         caseDroite.increment();
                         caseActuelle.etreVidee();
                         estFusionnee=true;
@@ -86,5 +112,11 @@ public class Ligne implements java.io.Serializable  {
                 }
             }
         }
+        tabToReturn[0]=merge;
+        tabToReturn[1]=scoreToAdd;
+        return tabToReturn;
+    }
+    public Ligne copy(){
+        return new Ligne(this);
     }
 }

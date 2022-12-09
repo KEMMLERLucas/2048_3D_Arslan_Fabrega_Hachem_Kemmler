@@ -30,28 +30,25 @@ public class Jeu implements java.io.Serializable {
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
     }
+    Jeu(Jeu jeu){
+        List<Grille> copyGrilles=new ArrayList<>();
+        jeu.getGrilleList().forEach(grille ->
+                copyGrilles.add(grille.copy()));
+        this.grilleList=copyGrilles;
+        this.retourArrierre=jeu.retourArrierre;
+        this.listeObservateur=jeu.listeObservateur;
+        this.score=jeu.score;
+        this.scoreMax=jeu.scoreMax;
+        this.tailleGrille=jeu.tailleGrille;
+    }
 
     public List<Grille> getGrille(){
         return grilleList;
     }
 
-    void recupererHaut() {
-        ///TODO Récupère la liste de ligne dont le déplacement va être vers le haut
-    }
 
-    void recupererBas() {
-        ///TODO Récupère la liste de ligne dont le déplacement va être vers le bas
-    }
-
-    void recupererGauche() {
-        ///TODO Récupère la liste de ligne dont le déplacement va être vers la gauche
-    }
-
-    void recupererDroite() {
-        ///TODO Récupère la liste de ligne dont le déplacement va être vers la droite
-    }
-
-    void deplacerAvant() {
+    boolean deplacerAvant() {
+        boolean merge = false;
         ///Décaler la grille 2 dans la 1, puis la grille 3 dans la 1
         Grille grille2 = grilleList.get(1);
         for (int i = 0; i < tailleGrille; i++) { ///On déplace de la grille 2 vers la grille 1
@@ -60,6 +57,7 @@ public class Jeu implements java.io.Serializable {
                 Tuile tuile = ligne.getTuile(j);
                 boolean changer = changerTuileGrille(tuile, grilleList.get(0), i, j);
                 if (changer) {
+                    merge=true;
                     grilleList.get(1).getLigne(i).getTuile(j).setValeur(0);
                     grilleList.get(1).getLigne(i).getTuile(j).setEstVide(true);
                 }
@@ -73,20 +71,24 @@ public class Jeu implements java.io.Serializable {
                 Tuile tuile = ligne.getTuile(j);
                 boolean changer = changerTuileGrille(tuile, grilleList.get(0), i, j);
                 if (changer) {
+                    merge=true;
                     grilleList.get(2).getLigne(i).getTuile(j).setValeur(0);
                     grilleList.get(2).getLigne(i).getTuile(j).setEstVide(true);
                 } else {
                     changer = changerTuileGrille(tuile, grilleList.get(1), i, j);
                     if (changer) {
+                        merge=true;
                         grilleList.get(2).getLigne(i).getTuile(j).setValeur(0);
                         grilleList.get(2).getLigne(i).getTuile(j).setEstVide(true);
                     }
                 }
             }
         }
+        return merge;
     }
 
-    void deplacerArrierre() {
+    boolean deplacerArrierre() {
+        boolean merge = false;
         ///Décaler la grille 2 dans la 3, puis la grille 1 dans la 3
         Grille grille2 = grilleList.get(1);
         grille2.afficherGrille();
@@ -98,6 +100,7 @@ public class Jeu implements java.io.Serializable {
                 if (tuile.getEstVide() == false) {
                     boolean changer = changerTuileGrille(tuile, grilleList.get(2), i, j);
                     if (changer) {
+                        merge=true;
                         grilleList.get(1).getLigne(i).getTuile(j).setValeur(0);
                         grilleList.get(1).getLigne(i).getTuile(j).setEstVide(true);
                     }
@@ -113,38 +116,56 @@ public class Jeu implements java.io.Serializable {
                 Tuile tuile = ligne.getTuile(j);
                 boolean changer = changerTuileGrille(tuile, grilleList.get(2), i, j);
                 if (changer) {
+                    merge=true;
                     grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
                     grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
                 } else {
                     changer = changerTuileGrille(tuile, grilleList.get(1), i, j);
                     if (changer) {
+                        merge=true;
                         grilleList.get(0).getLigne(i).getTuile(j).setValeur(0);
                         grilleList.get(0).getLigne(i).getTuile(j).setEstVide(true);
                     }
                 }
             }
         }
+        return merge;
     }
-    void deplacerDroite() {
+    boolean deplacerDroite() {
+        Object[] tab;
+        boolean merge = false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
             for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
                 Ligne ligne = g.getLigne(j);
-                ligne.deplacerDroite();
+                tab =ligne.deplacerDroite();
+                score=score+(int)tab[1];
+                if((boolean)tab[0]){
+                    merge=true;
+                }
             }
         }
+        return merge;
     }
-    void deplacerGauche() {
+    boolean deplacerGauche() {
+        Object[] tab;
+        boolean merge = false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
             for (int j = 0; j < tailleGrille; j++) { //on choisis la ligne
                 Ligne ligne = g.getLigne(j);
-                ligne.deplacerGauche();
+                tab=ligne.deplacerGauche();
+                score=score+(int)tab[1];
+                if((boolean)tab[0]){
+                    merge=true;
+                }
             }
         }
+        return merge;
     }
 
-    void deplacerBas(){
+    boolean deplacerBas(){
+        boolean merge=false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
             for (int j = 0; j < tailleGrille; j++) { //on choisis la colonne
@@ -160,10 +181,13 @@ public class Jeu implements java.io.Serializable {
                                 tuileDessous.setValeur(tuileActuelle.getValeur());
                                 tuileDessous.setEstVide(false);
                                 tuileActuelle.etreVidee();
+                                merge=true;
                             }else if(tuileActuelle.getValeur()==tuileDessous.getValeur() && !estFusionne){ /// Si les deux cases ont la même valeurs
+                                score+=tuileActuelle.getValeur()*2;
                                 tuileActuelle.etreVidee();
                                 tuileDessous.increment();
                                 estFusionne=true;
+                                merge=true;
                             }
                         }else{
                             ///Nothing happens
@@ -172,8 +196,10 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        return merge;
     }
-    void deplacerHaut(){
+    boolean deplacerHaut(){
+        boolean merge=false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
             for (int j = 0; j < tailleGrille; j++) { //on choisis la colonne
@@ -189,10 +215,13 @@ public class Jeu implements java.io.Serializable {
                                 tuileDessus.setValeur(tuileActuelle.getValeur());
                                 tuileDessus.setEstVide(false);
                                 tuileActuelle.etreVidee();
+                                merge=true;
                             }else if(tuileActuelle.getValeur()==tuileDessus.getValeur() && !estFusionnee){ /// Si les deux cases ont la même valeurs
+                                score+=tuileActuelle.getValeur()*2;
                                 tuileActuelle.etreVidee();
                                 tuileDessus.increment();
                                 estFusionnee=true;
+                                merge=true;
                             }
                         }else{
                             ///Nothing happens
@@ -201,6 +230,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        return merge;
     }
 
     boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ) {
@@ -211,6 +241,7 @@ public class Jeu implements java.io.Serializable {
             ligne.getTuile(posJ).setEstVide(false);
             changement = true;
         } else if (ligne.getTuile(posJ).getValeur() == tuile.getValeur()) {
+            score+=tuile.getValeur()*2;
             ligne.getTuile(posJ).setValeur(tuile.getValeur() * 2);
             changement = true;
 
@@ -309,6 +340,24 @@ public class Jeu implements java.io.Serializable {
             }
         }
     }
+
+    public  boolean arretJeu(){
+        Jeu j1=this.copy();
+        Jeu j2=this.copy();
+        Jeu j3=this.copy();
+        Jeu j4=this.copy();
+        Jeu j5=this.copy();
+        Jeu j6=this.copy();
+
+        if(j1.deplacerBas()) return false;
+        if(j2.deplacerHaut()) return false;
+        if(j3.deplacerDroite()) return false;
+        if(j4.deplacerGauche()) return false;
+        if(j5.deplacerAvant()) return false;
+        if(j6.deplacerArrierre()) return false;
+
+        return true;
+    }
     public boolean isPeutRetournerArrierre() {
         return peutRetournerArrierre;
     }
@@ -323,5 +372,23 @@ public class Jeu implements java.io.Serializable {
 
     public int getScore() {
         return score;
+    }
+    public void remplacerJeu(List<Grille> grilleList,int score){
+        this.grilleList=grilleList;
+        this.score=score;
+        this.afficherJeuConsole();
+    }
+    public  void remplacerJeuEntier(List<Grille> grilleList,int score, int retourArrierre,int scoreMax, int tailleGrille, boolean peutRetournerArrierre) {
+        this.grilleList=grilleList;
+        this.score=score;
+        this.retourArrierre=retourArrierre;
+        this.scoreMax=scoreMax;
+        this.tailleGrille=tailleGrille;
+        this.peutRetournerArrierre=peutRetournerArrierre;
+
+
+    }
+    public Jeu copy(){
+        return new Jeu(this);
     }
 }

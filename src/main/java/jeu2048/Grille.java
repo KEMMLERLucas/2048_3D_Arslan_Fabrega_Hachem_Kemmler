@@ -12,6 +12,16 @@ public class Grille implements java.io.Serializable {
         this.tailleMaxGrille = TailleMaxGrille;
     }
 
+    Grille(Grille grille){
+        List<Ligne> copyGrille=new ArrayList<>();
+        grille.getListLignes().forEach(ligne -> {
+            copyGrille.add(ligne.copy());
+        });
+        this.listLignes=copyGrille;
+        this.tailleMaxGrille=grille.tailleMaxGrille;
+
+    }
+
     public Ligne getLigne(int index) {
         return listLignes.get(index);
     }
@@ -53,5 +63,8 @@ public class Grille implements java.io.Serializable {
     }
     public List<Ligne> getListLignes() {
         return listLignes;
+    }
+    public Grille copy(){
+        return new Grille(this);
     }
 }
