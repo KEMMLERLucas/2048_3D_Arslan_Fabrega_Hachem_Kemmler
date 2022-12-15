@@ -3,10 +3,26 @@ package jeu2048;
 import java.io.*;
 import java.util.List;
 
+
+/**
+ * @author lkemmler
+ * The type Deserializer jeu. Used to deserialize a game from a file.
+ */
 public class DeserializerJeu {
+    /**
+     * The Oos.
+     */
     ObjectOutputStream oos;
+    /**
+     * The Ois.
+     */
     ObjectInputStream ois;
 
+    /**
+     * Deserialize Jeu. Deserializes a game from a file.
+     *
+     * @return Jeu, the game that has been deserialized.
+     */
     public Jeu deserialize() {
         Jeu jeu = null;
         try {

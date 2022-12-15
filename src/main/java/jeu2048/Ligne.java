@@ -3,15 +3,35 @@ package jeu2048;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author lkemmler
+ * The type Ligne, used to create a row.
+ */
 public class Ligne implements java.io.Serializable  {
+    /**
+     * The List of tiles in the row
+     */
     List<Tuile> listTuiles;
+    /**
+     * The maximum size of the row
+     */
     int tailleMaxLigne;
 
+    /**
+     * Instantiates a new Ligne.
+     *
+     * @param listTuiles the tile list in the row
+     */
     Ligne(List<Tuile> listTuiles) {
         this.listTuiles = listTuiles;
         this.tailleMaxLigne = listTuiles.size();
     }
 
+    /**
+     * Instantiates a new Ligne.
+     *
+     * @param ligne the row to copy
+     */
     Ligne(Ligne ligne){
         List<Tuile> copyLigne=new ArrayList<>();
         ligne.getListTuiles().forEach(tuile ->
@@ -21,13 +41,28 @@ public class Ligne implements java.io.Serializable  {
     }
 
 
+    /**
+     * Gets list tuiles.
+     *
+     * @return the list of tiles in the row
+     */
     public List<Tuile> getListTuiles() {
         return listTuiles;
     }
 
+    /**
+     * Gets tuile.
+     *
+     * @param index the index of the tile to get
+     * @return the tile at the index
+     */
     public Tuile getTuile(int index) {
         return listTuiles.get(index);
     }
+
+    /**
+     * Afficher ligne.
+     */
     public void afficherLigne(){
         System.out.println("------------------");
         listTuiles.forEach(tuile -> {
@@ -35,6 +70,10 @@ public class Ligne implements java.io.Serializable  {
         });
         System.out.println();
     }
+
+    /**
+     * Afficher derniere ligne.
+     */
     public void afficherDerniereLigne(){
         System.out.println("------------------");
         listTuiles.forEach(tuile -> {
@@ -43,6 +82,12 @@ public class Ligne implements java.io.Serializable  {
         System.out.println();
         System.out.println("------------------");
     }
+
+    /**
+     * Moving tile to the left
+     *
+     * @return An array containing the score to add, and the boolean if the row has changed
+     */
     public Object[] deplacerGauche() {
         boolean merge = false;
         Object[] tabToReturn = new Object[2];
@@ -79,6 +124,12 @@ public class Ligne implements java.io.Serializable  {
         tabToReturn[1]=scoreToAdd;
         return tabToReturn;
     }
+
+    /**
+     * Moving tile to the right
+     *
+     * @return an array containing the score to add, and the boolean if the row has changed
+     */
     public Object[] deplacerDroite(){
         boolean merge = false;
         Object[] tabToReturn = new Object[2];
@@ -116,6 +167,12 @@ public class Ligne implements java.io.Serializable  {
         tabToReturn[1]=scoreToAdd;
         return tabToReturn;
     }
+
+    /**
+     * Copy ligne.
+     *
+     * @return the ligne
+     */
     public Ligne copy(){
         return new Ligne(this);
     }

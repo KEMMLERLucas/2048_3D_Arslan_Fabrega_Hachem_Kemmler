@@ -5,7 +5,17 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * @author lkemmler
+ * The main class of the console version of the game.
+ */
 public class MainConsole {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws CloneNotSupportedException the clone not supported exception
+     */
     public static void main(String[] args) throws CloneNotSupportedException {
         boolean debugMode = true;
 

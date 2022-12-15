@@ -4,18 +4,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * @author lkemmler
+ * The type Jeu, used to create a game
+ */
 public class Jeu implements java.io.Serializable {
+    /**
+     * The Liste observers
+     */
     List<Observateur> listeObservateur;
+    /**
+     * The Grille list.
+     */
     List<Grille> grilleList;
+    /**
+     * The boolean telling you if you can do a rollback on the game
+     */
     private transient boolean peutRetournerArrierre;
+    /**
+     * The boolean used only when you are in a rollback state
+     */
+
     private transient boolean estEnTrainDeRetournerEnArrierre;
+    /**
+     * An int used to increase/set the number of rollback that you can do
+     */
     private int retourArrierre;
+    /**
+     * An int used to see when you are in a rollback state
+     */
     private int increment;
+    /**
+     * The score of the game
+     */
     private int score;
+    /**
+     * The max score "doable" in the game
+     */
     private int scoreMax;
+    /**
+     * The number of grid, use 3 for the normal game, 2 and 4 aren't working
+     */
     private int tailleGrille;
+    /**
+     * The previous list of game
+     */
     private List<Jeu> jeuPrécédent;
 
+    /**
+     * Instantiates a new Jeu.
+     *
+     * @param grilleList   The grid list in the game
+     * @param score        The score, which is 0 at the beginning and goes up when you do a move and 2 tiles merge
+     * @param tailleGrille The number of grid in the game
+     */
     Jeu(List<Grille> grilleList, int score, int tailleGrille) {
         this.grilleList = grilleList;
         this.peutRetournerArrierre = true;
@@ -27,6 +69,14 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille = tailleGrille;
         this.jeuPrécédent = new ArrayList<>();
     }
+
+    /**
+     * Instantiates a new Jeu.
+     *
+     * @param score        The score, which is 0 at the beginning and goes up when you do a move and 2 tiles merge
+     * @param tailleGrille The number of grid in the game
+     * @param TAILLEMAX    The max size of the game, used to create the randomness of the game
+     */
     Jeu(int score, int tailleGrille, int TAILLEMAX) {
         this.grilleList = null;
         this.peutRetournerArrierre = true;
@@ -40,6 +90,14 @@ public class Jeu implements java.io.Serializable {
         this.jeuPrécédent = new ArrayList<>();
     }
 
+    /**
+     * Instantiates a new Jeu.
+     *
+     * @param grilleList   The grid list
+     * @param retourArr    Boolean telling you if you can do a rollback on the game
+     * @param score        The score, which is 0 at the beginning and goes up when you do a move and 2 tiles merge
+     * @param tailleGrille The number of grid in the game
+     */
     Jeu(List<Grille> grilleList, Boolean retourArr, int score, int tailleGrille) {
         this.grilleList = grilleList;
         this.peutRetournerArrierre = retourArr;
@@ -52,6 +110,12 @@ public class Jeu implements java.io.Serializable {
         this.jeuPrécédent = new ArrayList<>();
         this.jeuPrécédent.add(this);
     }
+
+    /**
+     * Instantiates a new Jeu.
+     *
+     * @param jeu The game you want to copy
+     */
     Jeu(Jeu jeu){
         List<Grille> copyGrilles=new ArrayList<>();
         jeu.getGrilleList().forEach(grille ->
@@ -66,11 +130,21 @@ public class Jeu implements java.io.Serializable {
         this.jeuPrécédent = jeu.jeuPrécédent;
     }
 
+    /**
+     * Get grille list.
+     *
+     * @return grilleList
+     */
     public List<Grille> getGrille(){
         return grilleList;
     }
 
 
+    /**
+     * Move tile to the upper grid
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerAvant() {
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -122,6 +196,11 @@ public class Jeu implements java.io.Serializable {
         return merge;
     }
 
+    /**
+     * Move tile to the lower grid
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerArrierre() {
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -170,6 +249,12 @@ public class Jeu implements java.io.Serializable {
         if(merge)jeuPrécédent.add(copy);
         return merge;
     }
+
+    /**
+     * Moving tile to the right
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerDroite() {
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -190,6 +275,12 @@ public class Jeu implements java.io.Serializable {
         if (merge)jeuPrécédent.add(copy);
         return merge;
     }
+
+    /**
+     * Moving tile to the left
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerGauche() {
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -211,6 +302,11 @@ public class Jeu implements java.io.Serializable {
         return merge;
     }
 
+    /**
+     * Moving tile to the bottom
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerBas(){
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -249,6 +345,12 @@ public class Jeu implements java.io.Serializable {
         if(merge)jeuPrécédent.add(copy);
         return merge;
     }
+
+    /**
+     * Moving tile to the top
+     *
+     * @return the boolean telling you if tiles moved
+     */
     boolean deplacerHaut(){
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
@@ -288,6 +390,16 @@ public class Jeu implements java.io.Serializable {
         return merge;
     }
 
+    /**
+     * Used to move a tile between two grids
+     *
+     * @param tuile  The tile you want to move
+     * @param grille The grid you want to move the tile to
+     * @param posI   The position in I of the tile in the grid
+     * @param posJ   The position in J of the tile in the grid
+
+     * @return the boolean telling you if the tile moved
+     */
     boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ) {
         boolean changement = false;
         Ligne ligne = grille.getLigne(posI);
@@ -318,6 +430,9 @@ public class Jeu implements java.io.Serializable {
                 '}';
     }
 
+    /**
+     * Afficher jeu console.
+     */
     public void afficherJeuConsole() {
         System.out.print("Score actuel :" + score + "       " + "Score max :" + scoreMax);
         System.out.println();
@@ -326,6 +441,9 @@ public class Jeu implements java.io.Serializable {
         });
     }
 
+    /**
+     * Randomize.
+     */
     void randomize() {
         grilleList.forEach(grille -> {
             grille.getToutesLesTuiles().forEach(tuile -> {
@@ -334,17 +452,11 @@ public class Jeu implements java.io.Serializable {
         });
     }
 
-    void enregisterObservateur(Observateur o) {
-
-    }
-
-    void suprimerObservateur(Observateur o) {
-
-    }
-
-    void notifierObservateur(Observateur o) {
-
-    }
+    /**
+     * Get the list of empty tile in the game
+     *
+     * @return the list of empty tile
+     */
     public List<Tuile> getTuileVide(){
         List<Tuile> tuileVide = new ArrayList<>();
         grilleList.forEach(grille -> {
@@ -356,10 +468,19 @@ public class Jeu implements java.io.Serializable {
         });
         return tuileVide;
     }
+
+    /**
+     * Gets grille list.
+     *
+     * @return the grillelist
+     */
     public List<Grille> getGrilleList() {
         return grilleList;
     }
 
+    /**
+     * Add random tile.
+     */
     public void addRandomTile() {
         while (true) {
             AtomicBoolean randomized = new AtomicBoolean(false);
@@ -378,6 +499,11 @@ public class Jeu implements java.io.Serializable {
         }
     }
 
+    /**
+     * Test used to know if the game is over (no move available)
+     *
+     * @return the boolean telling you if the game is over
+     */
     public  boolean arretJeu(){
         Jeu j1=this.copy();
         Jeu j2=this.copy();
@@ -395,26 +521,66 @@ public class Jeu implements java.io.Serializable {
 
         return true;
     }
+
+    /**
+     * Return the boolean PeutRetournerArrierre
+     *
+     * @return peutRetournerArrierre
+     */
     public boolean isPeutRetournerArrierre() {
         return peutRetournerArrierre;
     }
 
+    /**
+     * Getter of retourArrierre
+     *
+     * @return retourArrierre
+     */
     public int getRetourArrierre() {
         return retourArrierre;
     }
 
+    /**
+     * Gets taille grille.
+     *
+     * @return the taille grille
+     */
     public int getTailleGrille() {
         return tailleGrille;
     }
 
+    /**
+     * Gets score.
+     *
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
+
+    /**
+     * Used to replace values in a game
+     *
+     * @param grilleList The grid that will replace the one of the game
+     * @param score      The score that will replace the one of the game
+     */
     public void remplacerJeu(List<Grille> grilleList,int score){
         this.grilleList=grilleList;
         this.score=score;
         this.afficherJeuConsole();
     }
+
+    /**
+     * Replace the entire game
+     *
+     * @param grilleList                      The list of grid you want to replace
+     * @param score                           The score you want to replace
+     * @param increment                       The increment you want to replace
+     * @param scoreMax                        The scoreMax you want to replace
+     * @param tailleGrille                    The size of the grid you want to replace
+     * @param peutRetournerArrierre           The boolean telling you if you can go back you want to replace
+     * @param estEnTrainDeRetournerEnArrierre The boolean telling you if you are going back you want to replace
+     */
     public  void remplacerJeuEntier(List<Grille> grilleList,int score, int increment,int scoreMax, int tailleGrille, boolean peutRetournerArrierre,boolean estEnTrainDeRetournerEnArrierre) {
         this.grilleList=grilleList;
         this.score=score;
@@ -426,6 +592,12 @@ public class Jeu implements java.io.Serializable {
 
 
     }
+
+    /**
+     * Used to rollback the game
+     *
+     * @return The boolean telling you you rolled back
+     */
     public boolean retourArriere(){
         boolean retour=false;
         if(!jeuPrécédent.isEmpty() && peutRetournerArrierre && increment>0){
@@ -441,6 +613,11 @@ public class Jeu implements java.io.Serializable {
         return scoreMax;
     }
 
+    /**
+     * Create random game.
+     *
+     * @param TAILLEMAX The maximum size of the game
+     */
     public void createRandomGame(int TAILLEMAX){
         int nbTuileDebutMax = 2;
         int nbTuile = TAILLEMAX * TAILLEMAX * TAILLEMAX;
@@ -495,6 +672,12 @@ public class Jeu implements java.io.Serializable {
         }
         this.grilleList=listGrilles;
     }
+
+    /**
+     * Used to copy the game
+     *
+     * @return The copied game
+     */
     public Jeu copy(){
         return new Jeu(this);
     }
