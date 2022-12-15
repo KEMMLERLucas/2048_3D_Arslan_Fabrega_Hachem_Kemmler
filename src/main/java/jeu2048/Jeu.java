@@ -7,28 +7,50 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Jeu implements java.io.Serializable {
     List<Observateur> listeObservateur;
     List<Grille> grilleList;
-    transient boolean peutRetournerArrierre;
-    int retourArrierre;
-    int score;
-    int scoreMax;
-    int tailleGrille;
+    private transient boolean peutRetournerArrierre;
+    private transient boolean estEnTrainDeRetournerEnArrierre;
+    private int retourArrierre;
+    private int increment;
+    private int score;
+    private int scoreMax;
+    private int tailleGrille;
+    private List<Jeu> jeuPrécédent;
 
     Jeu(List<Grille> grilleList, int score, int tailleGrille) {
         this.grilleList = grilleList;
         this.peutRetournerArrierre = true;
+        this.estEnTrainDeRetournerEnArrierre = false;
         this.retourArrierre = 5;
+        this.increment = 0;
         this.score = score;
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
+        this.jeuPrécédent = new ArrayList<>();
+    }
+    Jeu(int score, int tailleGrille, int TAILLEMAX) {
+        this.grilleList = null;
+        this.peutRetournerArrierre = true;
+        this.estEnTrainDeRetournerEnArrierre = false;
+        this.retourArrierre = 5;
+        this.increment = 0;
+        this.score = score;
+        this.scoreMax = 2048;
+        this.tailleGrille = tailleGrille;
+        this.createRandomGame(TAILLEMAX);
+        this.jeuPrécédent = new ArrayList<>();
     }
 
-    Jeu(List<Grille> grilleList, Boolean retourArr, int nbrRetArr, int score, int tailleGrille) {
+    Jeu(List<Grille> grilleList, Boolean retourArr, int score, int tailleGrille) {
         this.grilleList = grilleList;
         this.peutRetournerArrierre = retourArr;
+        this.estEnTrainDeRetournerEnArrierre = false;
         this.retourArrierre = 5;
+        this.increment = 0;
         this.score = score;
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
+        this.jeuPrécédent = new ArrayList<>();
+        this.jeuPrécédent.add(this);
     }
     Jeu(Jeu jeu){
         List<Grille> copyGrilles=new ArrayList<>();
@@ -37,9 +59,11 @@ public class Jeu implements java.io.Serializable {
         this.grilleList=copyGrilles;
         this.retourArrierre=jeu.retourArrierre;
         this.listeObservateur=jeu.listeObservateur;
+        this.estEnTrainDeRetournerEnArrierre = jeu.estEnTrainDeRetournerEnArrierre;
         this.score=jeu.score;
         this.scoreMax=jeu.scoreMax;
         this.tailleGrille=jeu.tailleGrille;
+        this.jeuPrécédent = jeu.jeuPrécédent;
     }
 
     public List<Grille> getGrille(){
@@ -48,6 +72,10 @@ public class Jeu implements java.io.Serializable {
 
 
     boolean deplacerAvant() {
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
+
+        Jeu copy=this.copy();
         boolean merge = false;
         ///Décaler la grille 2 dans la 1, puis la grille 3 dans la 1
         Grille grille2 = grilleList.get(1);
@@ -84,11 +112,21 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if(merge){
+            if(increment==retourArrierre){
+                jeuPrécédent.remove(0);
+                jeuPrécédent.add(copy);
+            }
+
+        }
         return merge;
     }
 
     boolean deplacerArrierre() {
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
         boolean merge = false;
+        Jeu copy=this.copy();
         ///Décaler la grille 2 dans la 3, puis la grille 1 dans la 3
         Grille grille2 = grilleList.get(1);
         grille2.afficherGrille();
@@ -129,9 +167,13 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if(merge)jeuPrécédent.add(copy);
         return merge;
     }
     boolean deplacerDroite() {
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
+        Jeu copy=this.copy();
         Object[] tab;
         boolean merge = false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
@@ -145,9 +187,13 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if (merge)jeuPrécédent.add(copy);
         return merge;
     }
     boolean deplacerGauche() {
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
+        Jeu copy=this.copy();
         Object[] tab;
         boolean merge = false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
@@ -161,10 +207,14 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if(merge)jeuPrécédent.add(copy);
         return merge;
     }
 
     boolean deplacerBas(){
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
+        Jeu copy=this.copy();
         boolean merge=false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
@@ -196,9 +246,13 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if(merge)jeuPrécédent.add(copy);
         return merge;
     }
     boolean deplacerHaut(){
+        if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
+        if(increment<retourArrierre) increment++;
+        Jeu copy=this.copy();
         boolean merge=false;
         for (int i = 0; i < tailleGrille; i++) { //on choisis la grille
             Grille g = grilleList.get(i);
@@ -230,6 +284,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
+        if(merge)jeuPrécédent.add(copy);
         return merge;
     }
 
@@ -250,24 +305,6 @@ public class Jeu implements java.io.Serializable {
 
     }
 
-    void retourArrierreTout() {
-        if (peutRetournerArrierre) {
-            ///TODO Gérer le retour arrière avec la sauvegarde de grille (HTML / JSON)
-            retourArrierre--;
-            if (retourArrierre == 0) {
-                peutRetournerArrierre = false;
-            }
-        }
-    }
-
-    void retourArrierre(int nbRetour) {
-        if (peutRetournerArrierre) {
-            ///TODO Gérer le retour arrière avec la sauvegarde de grille (HTML / JSON)
-            if (retourArrierre == 0) {
-                peutRetournerArrierre = false;
-            }
-        }
-    }
 
     @Override
     public String toString() {
@@ -378,15 +415,85 @@ public class Jeu implements java.io.Serializable {
         this.score=score;
         this.afficherJeuConsole();
     }
-    public  void remplacerJeuEntier(List<Grille> grilleList,int score, int retourArrierre,int scoreMax, int tailleGrille, boolean peutRetournerArrierre) {
+    public  void remplacerJeuEntier(List<Grille> grilleList,int score, int increment,int scoreMax, int tailleGrille, boolean peutRetournerArrierre,boolean estEnTrainDeRetournerEnArrierre) {
         this.grilleList=grilleList;
         this.score=score;
-        this.retourArrierre=retourArrierre;
+        this.increment=increment;
         this.scoreMax=scoreMax;
         this.tailleGrille=tailleGrille;
         this.peutRetournerArrierre=peutRetournerArrierre;
+        this.estEnTrainDeRetournerEnArrierre= estEnTrainDeRetournerEnArrierre;
 
 
+    }
+    public boolean retourArriere(){
+        boolean retour=false;
+        if(!jeuPrécédent.isEmpty() && peutRetournerArrierre && increment>0){
+            retour=true;
+            Jeu jeu=jeuPrécédent.get(this.increment-1);
+            jeuPrécédent.remove(this.increment-1);
+            this.remplacerJeuEntier(jeu.getGrilleList(),jeu.getScore(),increment-1,jeu.getScoreMax(),jeu.getTailleGrille(), this.retourArrierre != 4,true);
+        }
+        return retour;
+    }
+
+    private int getScoreMax() {
+        return scoreMax;
+    }
+
+    public void createRandomGame(int TAILLEMAX){
+        int nbTuileDebutMax = 2;
+        int nbTuile = TAILLEMAX * TAILLEMAX * TAILLEMAX;
+        int nbLigne = TAILLEMAX * TAILLEMAX;
+        int nbTuileDebut = 0;
+        List<Tuile> listTuiles = new ArrayList<Tuile>();
+        for (int i = 0; i < nbTuile; i++) {
+            Tuile t = new Tuile(0, true);
+            if (nbTuileDebut != nbTuileDebutMax) {
+                t.randomizeStart();
+                if (!t.getEstVide()) {
+                    nbTuileDebut++;
+                }
+            }
+            if (i == nbTuile-2 && nbTuileDebut == 0) {
+                t.setValeur(2);
+                t.setEstVide(false);
+            }
+            if (i == nbTuile-1 && nbTuileDebut != nbTuileDebutMax) {
+                t.setValeur(2);
+                t.setEstVide(false);
+            }
+            listTuiles.add(t);
+        }
+
+
+        List<Ligne> listLignes = new ArrayList<Ligne>();
+        for (int i = 0; i < nbLigne; i++) {
+            List<Tuile> listTuile = new ArrayList<Tuile>();
+            Ligne ligne = new Ligne(listTuile);
+            if (!listTuiles.isEmpty()) {
+                for (int j = 0; j < TAILLEMAX; j++) {
+                    ligne.getListTuiles().add(listTuiles.get(0));
+                    listTuiles.remove(0);
+                }
+                listLignes.add(ligne);
+            }
+        }
+
+        List<Grille> listGrilles = new ArrayList<Grille>();
+        for (int i = 0; i < TAILLEMAX; i++) {
+            List<Ligne> listLigne = new ArrayList<Ligne>();
+            Grille g = new Grille(listLigne, TAILLEMAX);
+
+            if (!listLignes.isEmpty()) {
+                for (int j = 0; j < TAILLEMAX; j++) {
+                    g.getListLignes().add(listLignes.get(0));
+                    listLignes.remove(0);
+                }
+                listGrilles.add(g);
+            }
+        }
+        this.grilleList=listGrilles;
     }
     public Jeu copy(){
         return new Jeu(this);

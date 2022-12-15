@@ -73,11 +73,11 @@ public class Tuile implements java.io.Serializable {
 
         int value = random.nextInt(max + min) + min;
         if (value == 1) {
-            this.valeur = 0;
-            this.estVide = true;
-        } else {
             this.valeur = 2;
             this.estVide = false;
+        } else {
+            this.valeur = 0;
+            this.estVide = true;
         }
     }
 

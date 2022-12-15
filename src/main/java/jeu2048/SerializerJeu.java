@@ -4,18 +4,18 @@ import java.io.*;
 import java.util.List;
 
 public class SerializerJeu {
-    List<Jeu> jeux;
+    private Jeu jeu;
     ObjectOutputStream out = null;
 
-    SerializerJeu(List<Jeu> jeu) {
-        this.jeux = jeu;
+    SerializerJeu(Jeu jeu) {
+        this.jeu = jeu;
     }
 
     public void serialize() {
         try {
             FileOutputStream fileOut = new FileOutputStream("grilles.ser");
             out = new ObjectOutputStream(fileOut);
-            out.writeObject(jeux);
+            out.writeObject(jeu);
             out.flush();
         } catch (IOException i) {
             i.printStackTrace();
@@ -30,19 +30,12 @@ public class SerializerJeu {
             }
         }
     }
-    public void addJeu(Jeu jeu) {
-        if(jeux.size()<5){
-            jeux.add(jeu);
-        }else{
-            jeux.remove(0);
-            jeux.add(jeu);
-        }
-    }
-    public void setJeu(List<Jeu> jeux) {
-        this.jeux = jeux;
+
+    public void setJeu(Jeu jeu) {
+        this.jeu = jeu;
     }
 
-    public List<Jeu> getJeu() {
-        return jeux;
+    public Jeu getJeu() {
+        return jeu;
     }
 }

@@ -175,10 +175,8 @@ public class JeuController {
         j4.randomize();
         j5.randomize();*/
         List<Jeu> enCours = List.of(j1);
-        SerializerJeu sj = new SerializerJeu(enCours);
-        sj.serialize();
         DeserializerJeu dj = new DeserializerJeu();
-        List<Jeu> lj = dj.deserialize();
+
         /// A voir si il ne faut pas tout faire dans la même classe (serialisation et deserilisation)
         //lj.get(0).afficherJeuConsole();
 

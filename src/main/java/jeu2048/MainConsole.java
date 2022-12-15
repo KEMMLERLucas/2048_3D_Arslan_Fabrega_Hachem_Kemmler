@@ -7,67 +7,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainConsole {
     public static void main(String[] args) throws CloneNotSupportedException {
-        boolean debugMode = false;
+        boolean debugMode = true;
+
+        boolean aFaitRetour=false;
 
 
-        Jeu jeu;
-        int TAILLEMAX = 3;
-        int nbTuileDebut = 0;
-        boolean retourEnCours=false;
-        boolean retourDejaFait=false;
-        boolean mouvementFait=false;
-        int countRetour=0;
-        int nbTuileDebutMax = 2;
-        int nbTuile = TAILLEMAX * TAILLEMAX * TAILLEMAX;
-        int nbLigne = TAILLEMAX * TAILLEMAX;
-        List<Tuile> listTuiles = new ArrayList<Tuile>();
-        for (int i = 0; i < nbTuile; i++) {
-            Tuile t = new Tuile(0, true);
-            if (nbTuileDebut != nbTuileDebutMax) {
-                t.randomizeStart();
-                if (!t.getEstVide()) {
-                    nbTuileDebut++;
-                }
-            }
-            if (i == nbTuile-2 && nbTuileDebut == 0) {
-                t.setValeur(2);
-                t.setEstVide(false);
-            }
-            if (i == nbTuile-1 && nbTuileDebut != nbTuileDebutMax) {
-                t.setValeur(2);
-                t.setEstVide(false);
-            }
-            listTuiles.add(t);
-        }
-
-
-        List<Ligne> listLignes = new ArrayList<Ligne>();
-        for (int i = 0; i < nbLigne; i++) {
-            List<Tuile> listTuile = new ArrayList<Tuile>();
-            Ligne ligne = new Ligne(listTuile);
-            if (!listTuiles.isEmpty()) {
-                for (int j = 0; j < TAILLEMAX; j++) {
-                    ligne.getListTuiles().add(listTuiles.get(0));
-                    listTuiles.remove(0);
-                }
-                listLignes.add(ligne);
-            }
-        }
-
-        List<Grille> listGrilles = new ArrayList<Grille>();
-        for (int i = 0; i < TAILLEMAX; i++) {
-            List<Ligne> listLigne = new ArrayList<Ligne>();
-            Grille g = new Grille(listLigne, TAILLEMAX);
-
-            if (!listLignes.isEmpty()) {
-                for (int j = 0; j < TAILLEMAX; j++) {
-                    g.getListLignes().add(listLignes.get(0));
-                    listLignes.remove(0);
-                }
-                listGrilles.add(g);
-            }
-        }
-        jeu = new Jeu(listGrilles, 0, TAILLEMAX);
 
         Tuile t1 = new Tuile(0, true);
         Tuile t2 = new Tuile(0, true);
@@ -117,7 +61,7 @@ public class MainConsole {
         Jeu copyJ1=j1.copy();
 
         enCours.add(copyJ1);
-        SerializerJeu sj = new SerializerJeu(enCours);
+        SerializerJeu sj = new SerializerJeu(copyJ1);
         sj.serialize();
 
         System.out.println("Bienvenue dans le 2048 3D");
@@ -125,7 +69,6 @@ public class MainConsole {
         AtomicBoolean playing = new AtomicBoolean(true);
 
         if (!debugMode) {
-            mouvementFait=false;
             boolean changementGrille = false;
             j1.afficherJeuConsole();
             System.out.print("Pour se déplacer, utilisez les touches:" +
@@ -138,67 +81,31 @@ public class MainConsole {
                     case "Z":
                         System.out.println("Vous avez choisi de monter");
                         changementGrille=j1.deplacerHaut();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "S":
                         System.out.println("Vous avez choisi de descendre");
                         changementGrille=j1.deplacerBas();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "Q":
                         System.out.println("Vous avez choisi d'aller à gauche");
                         changementGrille=j1.deplacerGauche();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "D":
                         System.out.println("Vous avez choisi d'aller à droite");
                         changementGrille=j1.deplacerDroite();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "F":
                         System.out.println("Vous avez choisi d'aller à l'étage supérieur");
                         changementGrille=j1.deplacerAvant();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "R":
                         System.out.println("Vous avez choisi d'aller à l'étage inférieur");
                         changementGrille=j1.deplacerArrierre();
-                        mouvementFait = true;
-                        if(retourEnCours){
-                            retourDejaFait=true;
-                            retourEnCours=false;
-                        }
                         break;
                     case "L":
-                        if(retourDejaFait || countRetour==enCours.size()-1 || enCours.size()==1 ){
-                            System.out.println("Impossible de faire un retour arrière");
-                            break;
-                        }
-                        System.out.println("Vous avez choisi de faire un retour en arrière");
-                        countRetour++;
-                        retourEnCours=true;
-                        Jeu jeuTemp=enCours.get(countRetour);
-                        j1.remplacerJeu(jeuTemp.grilleList, jeuTemp.score);
+                        aFaitRetour=j1.retourArriere();
+                        if(!aFaitRetour)
+                            System.out.println("Vous ne pouvez pas faire de retour arrière");
                         break;
                     case "C":
                         System.out.println("Vous avez choisi de quitter");
@@ -236,7 +143,7 @@ public class MainConsole {
                         }
                         break;
                 }
-                if(!retourEnCours && changementGrille ) {
+                if(changementGrille) {
                     int i = (int) Math.floor(Math.random() * 2);
                     if (i == 2) {
                         j1.addRandomTile();
@@ -246,17 +153,8 @@ public class MainConsole {
                     }
                 }
 
-                if(mouvementFait && !retourEnCours) {
-                    enCours.add(j1.copy());
-                    //sj.addJeu(j1.copy());
-                    System.out.println("Taille sj " +enCours.size());
-                    enCours.forEach(Jeu::afficherJeuConsole);
-                    if(enCours.size()>=5){
-                        enCours.remove(0);
-                    }
-                }
 
-                sj.serialize();
+
 
                 //j1.afficherJeuConsole();
                 j1.getGrilleList().forEach(grille -> {
@@ -273,8 +171,14 @@ public class MainConsole {
             }
 
         } else {
-        }
+        sj.setJeu(j1);
+        sj.serialize();
+        DeserializerJeu dj = new DeserializerJeu();
+        Jeu j2=dj.deserialize();
+        Jeu test=new Jeu(j2);
+        test.afficherJeuConsole();
 
+        }
     }
 }
 
