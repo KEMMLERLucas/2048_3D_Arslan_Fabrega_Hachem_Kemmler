@@ -14,8 +14,8 @@ public class VueGrille{
         grid.setStyle(style.getCouleurFond());
         grid.setPadding(new Insets(5, 5, 5, 5));
         grid.add(dessinerLigne.dessinerLigne(grille.getLigne(0),style),0,0 );
-        grid.add(dessinerLigne.dessinerLigne(grille.getLigne(1),style),0,1 );
-        grid.add(dessinerLigne.dessinerLigne(grille.getLigne(2),style),0,2 );
+        grid.add(dessinerLigne.dessinerLigne(grille.getLigne(1),style),0,2 );
+        grid.add(dessinerLigne.dessinerLigne(grille.getLigne(2),style),0,4 );
         return grid;
     }
 }
