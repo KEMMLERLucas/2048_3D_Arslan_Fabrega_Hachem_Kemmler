@@ -113,7 +113,6 @@ public class JeuController {
                         if (ok) ajouterCase(jeu);
                         break;
                 }
-                System.out.println(ok);
                 afficherJeu();
             }
         });

@@ -9,6 +9,7 @@ module jeu2048 {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires junit;
 
     opens jeu2048 to javafx.fxml;
     exports jeu2048;

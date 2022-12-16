@@ -24,7 +24,7 @@ public class Grille implements java.io.Serializable {
      * @param listLignes      the list of lignes
      * @param TailleMaxGrille the taille max grille
      */
-    Grille(List<Ligne> listLignes, int TailleMaxGrille) {
+    public Grille(List<Ligne> listLignes, int TailleMaxGrille) {
         this.listLignes = listLignes;
         this.tailleMaxGrille = TailleMaxGrille;
     }

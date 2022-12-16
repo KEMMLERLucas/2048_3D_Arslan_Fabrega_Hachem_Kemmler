@@ -22,7 +22,7 @@ public class Ligne implements java.io.Serializable  {
      *
      * @param listTuiles the tile list in the row
      */
-    Ligne(List<Tuile> listTuiles) {
+    public Ligne(List<Tuile> listTuiles) {
         this.listTuiles = listTuiles;
         this.tailleMaxLigne = listTuiles.size();
     }

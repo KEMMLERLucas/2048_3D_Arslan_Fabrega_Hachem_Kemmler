@@ -60,7 +60,7 @@ public class Jeu implements java.io.Serializable {
      * @param score        The score, which is 0 at the beginning and goes up when you do a move and 2 tiles merge
      * @param tailleGrille The number of grid in the game
      */
-    Jeu(List<Grille> grilleList, int score, int tailleGrille) {
+    public Jeu(List<Grille> grilleList, int score, int tailleGrille) {
         this.grilleList = grilleList;
         this.peutRetournerArrierre = true;
         this.estEnTrainDeRetournerEnArrierre = false;
@@ -365,7 +365,7 @@ public class Jeu implements java.io.Serializable {
      *
      * @return the boolean telling you if tiles moved
      */
-    boolean deplacerHaut(){
+    public boolean deplacerHaut(){
         if(estEnTrainDeRetournerEnArrierre)peutRetournerArrierre=false;
         if(increment<retourArrierre) increment++;
         Jeu copy=this.copy();
@@ -547,9 +547,8 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille=tailleGrille;
         this.peutRetournerArrierre=peutRetournerArrierre;
         this.estEnTrainDeRetournerEnArrierre= estEnTrainDeRetournerEnArrierre;
-
-
     }
+
     public boolean retourArriere(){
         boolean retour=false;
         if(!jeuPrecedent.isEmpty() && peutRetournerArrierre && increment>0){
