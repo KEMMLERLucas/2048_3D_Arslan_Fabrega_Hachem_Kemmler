@@ -116,7 +116,6 @@ public class Ligne implements java.io.Serializable  {
                     } else { //Si c'est pas vide, et qu'elle n'a pas la même valeur, on fait rien
                         break;
                     }
-
                 }
             }
         }

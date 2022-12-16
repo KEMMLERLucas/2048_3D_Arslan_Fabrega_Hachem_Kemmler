@@ -2,6 +2,7 @@ package jeu2048;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -50,6 +51,7 @@ public class Jeu implements java.io.Serializable {
      * The previous list of game
      */
     private List<Jeu> jeuPrécédent;
+    private Style style = new StyleClassique();
 
     /**
      * Instantiates a new Jeu.
@@ -139,7 +141,7 @@ public class Jeu implements java.io.Serializable {
         this.scoreMax=jeuRecup.scoreMax;
         this.tailleGrille=jeuRecup.tailleGrille;
         this.jeuPrécédent = jeuRecup.jeuPrécédent;
-        
+
     }
 
     /**
@@ -401,17 +403,15 @@ public class Jeu implements java.io.Serializable {
         if(merge)jeuPrécédent.add(copy);
         return merge;
     }
-
     /**
-     * Used to move a tile between two grids
-     *
-     * @param tuile  The tile you want to move
-     * @param grille The grid you want to move the tile to
-     * @param posI   The position in I of the tile in the grid
-     * @param posJ   The position in J of the tile in the grid
-
-     * @return the boolean telling you if the tile moved
+     * Loading the game from a serialized file
+     * @return the unserialized game
      */
+    public Jeu chargerJeu(){
+        DeserializerJeu dj = new DeserializerJeu();
+        return dj.deserialize();
+    }
+
     boolean changerTuileGrille(Tuile tuile, Grille grille, int posI, int posJ) {
         boolean changement = false;
         Ligne ligne = grille.getLigne(posI);
@@ -442,9 +442,6 @@ public class Jeu implements java.io.Serializable {
                 '}';
     }
 
-    /**
-     * Afficher jeu console.
-     */
     public void afficherJeuConsole() {
         System.out.print("Score actuel :" + score + "       " + "Score max :" + scoreMax);
         System.out.println();
@@ -453,9 +450,6 @@ public class Jeu implements java.io.Serializable {
         });
     }
 
-    /**
-     * Randomize.
-     */
     void randomize() {
         grilleList.forEach(grille -> {
             grille.getToutesLesTuiles().forEach(tuile -> {
@@ -463,20 +457,18 @@ public class Jeu implements java.io.Serializable {
             });
         });
     }
-    /**
-     * Loading the game from a serialized file
-     * @return the unserialized game
-     */
-    public Jeu chargerJeu(){
-        DeserializerJeu dj = new DeserializerJeu();
-        return dj.deserialize();
+
+    void enregisterObservateur(Observateur o) {
+
     }
 
-    /**
-     * Get the list of empty tile in the game
-     *
-     * @return the list of empty tile
-     */
+    void suprimerObservateur(Observateur o) {
+
+    }
+
+    void notifierObservateur(Observateur o) {
+
+    }
     public List<Tuile> getTuileVide(){
         List<Tuile> tuileVide = new ArrayList<>();
         grilleList.forEach(grille -> {
@@ -488,19 +480,10 @@ public class Jeu implements java.io.Serializable {
         });
         return tuileVide;
     }
-
-    /**
-     * Gets grille list.
-     *
-     * @return the grillelist
-     */
     public List<Grille> getGrilleList() {
         return grilleList;
     }
 
-    /**
-     * Add random tile.
-     */
     public void addRandomTile() {
         while (true) {
             AtomicBoolean randomized = new AtomicBoolean(false);
@@ -519,11 +502,6 @@ public class Jeu implements java.io.Serializable {
         }
     }
 
-    /**
-     * Test used to know if the game is over (no move available)
-     *
-     * @return the boolean telling you if the game is over
-     */
     public  boolean arretJeu(){
         Jeu j1=this.copy();
         Jeu j2=this.copy();
@@ -541,66 +519,26 @@ public class Jeu implements java.io.Serializable {
 
         return true;
     }
-
-    /**
-     * Return the boolean PeutRetournerArrierre
-     *
-     * @return peutRetournerArrierre
-     */
     public boolean isPeutRetournerArrierre() {
         return peutRetournerArrierre;
     }
 
-    /**
-     * Getter of retourArrierre
-     *
-     * @return retourArrierre
-     */
     public int getRetourArrierre() {
         return retourArrierre;
     }
 
-    /**
-     * Gets taille grille.
-     *
-     * @return the taille grille
-     */
     public int getTailleGrille() {
         return tailleGrille;
     }
 
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
     public int getScore() {
         return score;
     }
-
-    /**
-     * Used to replace values in a game
-     *
-     * @param grilleList The grid that will replace the one of the game
-     * @param score      The score that will replace the one of the game
-     */
     public void remplacerJeu(List<Grille> grilleList,int score){
         this.grilleList=grilleList;
         this.score=score;
         this.afficherJeuConsole();
     }
-
-    /**
-     * Replace the entire game
-     *
-     * @param grilleList                      The list of grid you want to replace
-     * @param score                           The score you want to replace
-     * @param increment                       The increment you want to replace
-     * @param scoreMax                        The scoreMax you want to replace
-     * @param tailleGrille                    The size of the grid you want to replace
-     * @param peutRetournerArrierre           The boolean telling you if you can go back you want to replace
-     * @param estEnTrainDeRetournerEnArrierre The boolean telling you if you are going back you want to replace
-     */
     public  void remplacerJeuEntier(List<Grille> grilleList,int score, int increment,int scoreMax, int tailleGrille, boolean peutRetournerArrierre,boolean estEnTrainDeRetournerEnArrierre) {
         this.grilleList=grilleList;
         this.score=score;
@@ -612,12 +550,6 @@ public class Jeu implements java.io.Serializable {
 
 
     }
-
-    /**
-     * Used to rollback the game
-     *
-     * @return The boolean telling you you rolled back
-     */
     public boolean retourArriere(){
         boolean retour=false;
         if(!jeuPrécédent.isEmpty() && peutRetournerArrierre && increment>0){
@@ -633,11 +565,6 @@ public class Jeu implements java.io.Serializable {
         return scoreMax;
     }
 
-    /**
-     * Create random game.
-     *
-     * @param TAILLEMAX The maximum size of the game
-     */
     public void createRandomGame(int TAILLEMAX){
         int nbTuileDebutMax = 2;
         int nbTuile = TAILLEMAX * TAILLEMAX * TAILLEMAX;
@@ -692,13 +619,81 @@ public class Jeu implements java.io.Serializable {
         }
         this.grilleList=listGrilles;
     }
-
-    /**
-     * Used to copy the game
-     *
-     * @return The copied game
-     */
     public Jeu copy(){
         return new Jeu(this);
+    }
+
+    /**
+     * Methode pour changer le style du jeu
+     * @param s
+     */
+    public void setStyle(Style s){
+        style=s;
+    }
+
+    /**
+     * methode pour recuperer le style
+     * @return
+     */
+    public Style getStyle(){
+        return style;
+    }
+
+    /**
+     * methode qui permet de savoir si jeu contient un 2048
+     * @return true si 2048
+     */
+    public boolean contient2048(){
+        boolean a2048 = false;
+        for (Grille g:grilleList){
+            for(Ligne l:g.getListLignes()){
+                for (Tuile t : l.getListTuiles()){
+                    if(t.getValeur()==2048){
+                        a2048 = true;
+                    }
+                }
+            }
+        }
+        return a2048;
+    }
+
+    /**
+     * permet de savoir si le jeu est perdu
+     * @return true si perdu
+     */
+    public boolean perdu(){
+        if(arretJeu() && !contient2048()){
+            return true;
+        }
+        return false;
+    }
+
+    public void coupAleatoire(){
+        boolean coupJouer = false;
+        while(!coupJouer){
+            Random random = new Random();
+            int nb;
+            nb = random.nextInt(6);
+            switch (nb){
+                case 0:
+                    deplacerBas();
+                    break;
+                case 1:
+                    deplacerHaut();
+                    break;
+                case 2:
+                    deplacerDroite();
+                    break;
+                case 3:
+                    deplacerGauche();
+                    break;
+                case 4:
+                    deplacerAvant();
+                    break;
+                case 5:
+                    deplacerArrierre();
+                    break;
+            }
+        }
     }
 }
