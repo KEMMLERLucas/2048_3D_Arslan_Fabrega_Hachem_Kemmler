@@ -30,6 +30,15 @@ public class Ligne implements java.io.Serializable  {
     /**
      * Instantiates a new Ligne.
      *
+     * @param listTuiles the tile list in the row
+     */
+    Ligne(List<Tuile> listTuiles, int tailleMaxLigne) {
+        this.listTuiles = listTuiles;
+        this.tailleMaxLigne = tailleMaxLigne;
+    }
+    /**
+     * Instantiates a new Ligne.
+     *
      * @param ligne the row to copy
      */
     Ligne(Ligne ligne){
@@ -101,14 +110,17 @@ public class Ligne implements java.io.Serializable  {
                 if (j != 0 && !listTuiles.get(j).getEstVide()) {
                     Tuile caseGauche = listTuiles.get(j - 1);
                     Tuile caseActuelle = listTuiles.get(j);
+                    System.out.println(caseGauche.getEstVide());
                     if (caseGauche.getEstVide()) { //Si c'est vide, on la décale vers la gauche
                         caseGauche.setValeur(caseActuelle.getValeur());
                         caseGauche.setEstVide(false);
                         caseActuelle.setValeur(0);
                         caseActuelle.setEstVide(true);
                         merge=true;
+                        System.out.println(merge + " déplacement");
                     } else if (caseActuelle.getValeur() == caseGauche.getValeur() && !estFusionne) { //Si celle a gauche a la même valeur que l'actuelle, on décale l'actuelle a gauche et on incrémente
                         scoreToAdd+=caseGauche.getValeur()*2;
+                        System.out.println(merge + " fusion");
                         merge=true;
                         caseGauche.increment();
                         caseActuelle.etreVidee();

@@ -183,12 +183,10 @@ public class MainConsole {
             }
 
         } else {
-        sj.setJeu(j1);
-        sj.serialize();
-        DeserializerJeu dj = new DeserializerJeu();
-        Jeu j2=dj.deserialize();
-        Jeu test=new Jeu(j2);
-        test.afficherJeuConsole();
+            Jeu test= new Jeu(0,3,3);
+            test.afficherJeuConsole();
+            test.deplacerGauche();
+            test.afficherJeuConsole();
 
         }
     }

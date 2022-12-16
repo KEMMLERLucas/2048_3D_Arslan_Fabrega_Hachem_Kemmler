@@ -139,7 +139,7 @@ public class Jeu implements java.io.Serializable {
         this.scoreMax=jeuRecup.scoreMax;
         this.tailleGrille=jeuRecup.tailleGrille;
         this.jeuPrécédent = jeuRecup.jeuPrécédent;
-        
+
     }
 
     /**
@@ -667,7 +667,7 @@ public class Jeu implements java.io.Serializable {
         List<Ligne> listLignes = new ArrayList<Ligne>();
         for (int i = 0; i < nbLigne; i++) {
             List<Tuile> listTuile = new ArrayList<Tuile>();
-            Ligne ligne = new Ligne(listTuile);
+            Ligne ligne = new Ligne(listTuile,TAILLEMAX);
             if (!listTuiles.isEmpty()) {
                 for (int j = 0; j < TAILLEMAX; j++) {
                     ligne.getListTuiles().add(listTuiles.get(0));
