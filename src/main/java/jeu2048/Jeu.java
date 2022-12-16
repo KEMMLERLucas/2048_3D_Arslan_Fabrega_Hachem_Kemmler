@@ -676,22 +676,22 @@ public class Jeu implements java.io.Serializable {
             nb = random.nextInt(6);
             switch (nb){
                 case 0:
-                    deplacerBas();
+                    coupJouer =deplacerBas();
                     break;
                 case 1:
-                    deplacerHaut();
+                    coupJouer =deplacerHaut();
                     break;
                 case 2:
-                    deplacerDroite();
+                    coupJouer =deplacerDroite();
                     break;
                 case 3:
-                    deplacerGauche();
+                    coupJouer =deplacerGauche();
                     break;
                 case 4:
-                    deplacerAvant();
+                    coupJouer =deplacerAvant();
                     break;
                 case 5:
-                    deplacerArrierre();
+                    coupJouer =deplacerArrierre();
                     break;
             }
         }
