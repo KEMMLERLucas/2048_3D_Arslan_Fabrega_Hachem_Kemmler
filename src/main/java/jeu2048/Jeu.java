@@ -129,6 +129,18 @@ public class Jeu implements java.io.Serializable {
         this.tailleGrille=jeu.tailleGrille;
         this.jeuPrécédent = jeu.jeuPrécédent;
     }
+    Jeu(){
+        Jeu jeuRecup=this.chargerJeu();
+        this.grilleList=jeuRecup.grilleList;
+        this.retourArrierre=jeuRecup.retourArrierre;
+        this.listeObservateur=jeuRecup.listeObservateur;
+        this.estEnTrainDeRetournerEnArrierre = jeuRecup.estEnTrainDeRetournerEnArrierre;
+        this.score=jeuRecup.score;
+        this.scoreMax=jeuRecup.scoreMax;
+        this.tailleGrille=jeuRecup.tailleGrille;
+        this.jeuPrécédent = jeuRecup.jeuPrécédent;
+        
+    }
 
     /**
      * Get grille list.
@@ -450,6 +462,14 @@ public class Jeu implements java.io.Serializable {
                 tuile.randomize();
             });
         });
+    }
+    /**
+     * Loading the game from a serialized file
+     * @return the unserialized game
+     */
+    public Jeu chargerJeu(){
+        DeserializerJeu dj = new DeserializerJeu();
+        return dj.deserialize();
     }
 
     /**

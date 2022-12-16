@@ -153,6 +153,8 @@ public class MainConsole {
                         }
                         break;
                 }
+                sj.setJeu(j1);
+                sj.serialize();
                 if(changementGrille) {
                     int i = (int) Math.floor(Math.random() * 2);
                     if (i == 2) {
