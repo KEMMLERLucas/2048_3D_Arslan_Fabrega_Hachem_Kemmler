@@ -5,8 +5,10 @@
 
 <AnchorPane prefHeight="84.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jeu2048.JeuController">
    <children>
-      <Button layoutX="14.0" layoutY="29.0" mnemonicParsing="false" text="Coup aléatoire" />
+      <Button layoutX="14.0" layoutY="29.0" mnemonicParsing="false" text="Coup aléatoire" onAction="#coupAleatoire"/>
       <Button layoutX="124.0" layoutY="29.0" mnemonicParsing="false" text="laisser finr IA" />
-      <Button layoutX="220.0" layoutY="29.0" mnemonicParsing="false" text="Rool Back" />
+      <Button layoutX="220.0" layoutY="29.0" mnemonicParsing="false" text="Rool Back" onAction="#rollBack"/>
+      <Button layoutX="490.0" layoutY="16.0" mnemonicParsing="false" text="theme classique" onAction="#changerThemeClassique"/>
+      <Button layoutX="490.0" layoutY="42.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="102.0" text="theme noel" onAction="#changerThemeNoel"/>
    </children>
 </AnchorPane>

@@ -183,11 +183,13 @@ public class MainConsole {
             }
 
         } else {
-            Jeu test= new Jeu(0,3,3);
+            j1.afficherJeuConsole();
+            j1.deplacerBas();
+            j1.afficherJeuConsole();
+            SerializerJeu sj2 = new SerializerJeu(j1);
+            sj2.serialize();
+            Jeu test=new Jeu();
             test.afficherJeuConsole();
-            test.deplacerGauche();
-            test.afficherJeuConsole();
-
         }
     }
 }

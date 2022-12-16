@@ -50,7 +50,7 @@ public class Jeu implements java.io.Serializable {
     /**
      * The previous list of game
      */
-    private List<Jeu> jeuPrécédent;
+    private List<Jeu> jeuPrecedent;
     private Style style = new StyleClassique();
 
     /**
@@ -69,7 +69,7 @@ public class Jeu implements java.io.Serializable {
         this.score = score;
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
-        this.jeuPrécédent = new ArrayList<>();
+        this.jeuPrecedent = new ArrayList<>();
     }
 
     /**
@@ -89,7 +89,7 @@ public class Jeu implements java.io.Serializable {
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
         this.createRandomGame(TAILLEMAX);
-        this.jeuPrécédent = new ArrayList<>();
+        this.jeuPrecedent = new ArrayList<>();
     }
 
     /**
@@ -109,8 +109,8 @@ public class Jeu implements java.io.Serializable {
         this.score = score;
         this.scoreMax = 2048;
         this.tailleGrille = tailleGrille;
-        this.jeuPrécédent = new ArrayList<>();
-        this.jeuPrécédent.add(this);
+        this.jeuPrecedent = new ArrayList<>();
+        this.jeuPrecedent.add(this);
     }
 
     /**
@@ -129,7 +129,7 @@ public class Jeu implements java.io.Serializable {
         this.score=jeu.score;
         this.scoreMax=jeu.scoreMax;
         this.tailleGrille=jeu.tailleGrille;
-        this.jeuPrécédent = jeu.jeuPrécédent;
+        this.jeuPrecedent = jeu.jeuPrecedent;
     }
     Jeu(){
         Jeu jeuRecup=this.chargerJeu();
@@ -140,7 +140,7 @@ public class Jeu implements java.io.Serializable {
         this.score=jeuRecup.score;
         this.scoreMax=jeuRecup.scoreMax;
         this.tailleGrille=jeuRecup.tailleGrille;
-        this.jeuPrécédent = jeuRecup.jeuPrécédent;
+        this.jeuPrecedent = jeuRecup.jeuPrecedent;
 
     }
 
@@ -202,8 +202,8 @@ public class Jeu implements java.io.Serializable {
         }
         if(merge){
             if(increment==retourArrierre){
-                jeuPrécédent.remove(0);
-                jeuPrécédent.add(copy);
+                jeuPrecedent.remove(0);
+                jeuPrecedent.add(copy);
             }
 
         }
@@ -260,7 +260,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
-        if(merge)jeuPrécédent.add(copy);
+        if(merge)jeuPrecedent.add(copy);
         return merge;
     }
 
@@ -286,7 +286,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
-        if (merge)jeuPrécédent.add(copy);
+        if (merge)jeuPrecedent.add(copy);
         return merge;
     }
 
@@ -312,7 +312,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
-        if(merge)jeuPrécédent.add(copy);
+        if(merge)jeuPrecedent.add(copy);
         return merge;
     }
 
@@ -356,7 +356,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
-        if(merge)jeuPrécédent.add(copy);
+        if(merge)jeuPrecedent.add(copy);
         return merge;
     }
 
@@ -400,7 +400,7 @@ public class Jeu implements java.io.Serializable {
                 }
             }
         }
-        if(merge)jeuPrécédent.add(copy);
+        if(merge)jeuPrecedent.add(copy);
         return merge;
     }
     /**
@@ -552,10 +552,10 @@ public class Jeu implements java.io.Serializable {
     }
     public boolean retourArriere(){
         boolean retour=false;
-        if(!jeuPrécédent.isEmpty() && peutRetournerArrierre && increment>0){
+        if(!jeuPrecedent.isEmpty() && peutRetournerArrierre && increment>0){
             retour=true;
-            Jeu jeu=jeuPrécédent.get(this.increment-1);
-            jeuPrécédent.remove(this.increment-1);
+            Jeu jeu=jeuPrecedent.get(this.increment-1);
+            jeuPrecedent.remove(this.increment-1);
             this.remplacerJeuEntier(jeu.getGrilleList(),jeu.getScore(),increment-1,jeu.getScoreMax(),jeu.getTailleGrille(), this.retourArrierre != 4,true);
         }
         return retour;

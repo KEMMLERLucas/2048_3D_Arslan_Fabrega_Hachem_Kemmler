@@ -2,7 +2,7 @@ package jeu2048;
 
 import javafx.scene.paint.Color;
 
-public class StyleNoel extends Style{
+public class StyleNoel extends Style implements java.io.Serializable {
     @Override
     public String getCouleurFond() {
         return "-fx-background-color: #900C3F ;";
