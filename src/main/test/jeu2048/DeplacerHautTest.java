@@ -1,17 +1,12 @@
-package test;
+package jeu2048;
 
-import jeu2048.Grille;
-import jeu2048.Jeu;
-import jeu2048.Ligne;
-import jeu2048.Tuile;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-class testDeplacementHaut {
-
+class DeplacerHautTest {
     Tuile t1 = new Tuile(0, true);
     Tuile t2 = new Tuile(0, true);
     Tuile t3 = new Tuile(4, false);
@@ -28,18 +23,18 @@ class testDeplacementHaut {
     Ligne l3 = new Ligne(List.of(t7, t8, t9));
 
     Tuile t10 = new Tuile(0, true);
-    Tuile t11 = new Tuile(2, true);
-    Tuile t12 = new Tuile(2, true);
+    Tuile t11 = new Tuile(2, false);
+    Tuile t12 = new Tuile(2, false);
     Ligne l4 = new Ligne(List.of(t10, t11, t12));
 
-    Tuile t13 = new Tuile(2, true);
-    Tuile t14 = new Tuile(2, true);
-    Tuile t15 = new Tuile(2, true);
+    Tuile t13 = new Tuile(2, false);
+    Tuile t14 = new Tuile(2, false);
+    Tuile t15 = new Tuile(2, false);
     Ligne l5 = new Ligne(List.of(t13, t14, t15));
 
-    Tuile t16 = new Tuile(2, true);
+    Tuile t16 = new Tuile(2, false);
     Tuile t17 = new Tuile(0, true);
-    Tuile t18 = new Tuile(2, true);
+    Tuile t18 = new Tuile(2, false);
     Ligne l6 = new Ligne(List.of(t16, t17, t18));
 
     Tuile t19 = new Tuile(0, true);
@@ -62,59 +57,17 @@ class testDeplacementHaut {
     List<Grille> lg = List.of(g1, g2, g3);
     Jeu j1 = new Jeu(lg, 0, 3);
     /**
-     * test X -> 4
-     * test X -> X
-     * test 4 -> X
+     * test X X 4  | X 2 2  | X X X
+     * test X 4 X  | 2 X 2  | X X X
+     * test 4 X X  | 2 X 2  | X X X
+     * but
+     * test 4 4 4  | 4 4 4  | X X X
+     * test X X X  | X X 2  | X X X
+     * test X X X  | X X X  | X X X
      */
     @Test
-   void testDeplacementUneCaseDeDistance2() {
+    void testDeplacement() {
         j1.deplacerHaut();
-        assertEquals(t1.getValeur(), 4);
-    }
-    /**
-     * test X -> 4
-     * test 4 -> X
-     * test X -> X
-     */
-    @Test
-     void testDeplacementUneCaseDeDistance1() {
-        assertEquals(t2.getValeur(), 4);
-    }
-    /**
-     * test 4 -> 4
-     * test X -> X
-     * test X -> X
-     */
-    @Test
-    void testDeplacementUneCaseDeDistance0() {
-        assertEquals(t4.getValeur(), 4);
-    }
-
-    /**
-     * test X -> 4
-     * test 2 -> X
-     * test 2 -> X
-     */
-    @Test
-    void testFusion1() {
-        assertEquals(t10.getValeur(), 4);
-    }
-    /**
-     * test 2 -> 4
-     * test 2 -> X
-     * test X -> X
-     */
-    @Test
-    public void testFusion2() {
-        assertEquals(t11.getValeur(), 4);
-    }
-    /**
-     * test 2 -> 4
-     * test 2 -> 2
-     * test 2 -> X
-     */
-    @Test
-    void testFusion3() {
-        assertEquals(t12.getValeur()+t15.getValeur(), 6);
+        assertEquals("------------------[  4 ][  4 ][  4 ]------------------[    ][    ][    ]------------------[    ][    ][    ]------------------------------------[  4 ][  4 ][  4 ]------------------[    ][    ][  2 ]------------------[    ][    ][    ]------------------------------------[    ][    ][    ]------------------[    ][    ][    ]------------------[    ][    ][    ]------------------", j1.getStringGrille());
     }
 }

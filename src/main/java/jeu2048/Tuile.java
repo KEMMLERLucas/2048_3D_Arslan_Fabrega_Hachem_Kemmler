@@ -154,6 +154,23 @@ public class Tuile implements java.io.Serializable {
             }
         }
     }
+    public String getStringTuile(){
+        String res = "";
+        if (this.estVide) {
+            res ="[    ]" ;
+        } else {
+            if (this.valeur < 10) {
+                res ="[  " + this.valeur + " ]";
+            } else if (this.valeur < 100) {
+                res ="[ " + this.valeur + " ]";
+            } else if (this.valeur < 1000) {
+                res ="[ " + this.valeur + "]";
+            } else if (this.valeur < 10000) {
+                res ="[" + this.valeur + "]";
+            }
+        }
+        return res;
+    }
 
     /**
      * Copy tuile.

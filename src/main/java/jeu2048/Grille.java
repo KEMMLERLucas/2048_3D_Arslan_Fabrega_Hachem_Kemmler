@@ -94,6 +94,18 @@ public class Grille implements java.io.Serializable {
         }
     }
 
+    public String getStringGrille(){
+        String res = "";
+        for (int i = 0; i < tailleMaxGrille; i++) {
+            if (i == tailleMaxGrille - 1) {
+                res = res + listLignes.get(i).getStringDerniereLigne();
+            } else {
+                res = res + listLignes.get(i).getStringLigne();
+            }
+        }
+        return res;
+    }
+
     /**
      * Get the list of empty tile.
      *

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author lkemmler
@@ -448,6 +449,13 @@ public class Jeu implements java.io.Serializable {
         grilleList.forEach(grille -> {
             grille.afficherGrille();
         });
+    }
+    public String getStringGrille(){
+        AtomicReference<String> rest = new AtomicReference<>("");
+        grilleList.forEach(grille -> {
+            rest.set(rest + grille.getStringGrille());
+        });
+        return rest.get();
     }
 
     void randomize() {

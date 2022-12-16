@@ -2,6 +2,7 @@ package jeu2048;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author lkemmler
@@ -80,6 +81,14 @@ public class Ligne implements java.io.Serializable  {
         System.out.println();
     }
 
+    public String getStringLigne(){
+        AtomicReference<String> truc = new AtomicReference<>("------------------");
+        listTuiles.forEach(tuile -> {
+            truc.set(truc + tuile.getStringTuile());
+        });
+        return truc.get();
+    }
+
     /**
      * Afficher derniere ligne.
      */
@@ -90,6 +99,15 @@ public class Ligne implements java.io.Serializable  {
         });
         System.out.println();
         System.out.println("------------------");
+    }
+
+    public String getStringDerniereLigne(){
+        AtomicReference<String> res = new AtomicReference<>("------------------");
+        listTuiles.forEach(tuile -> {
+            res.set(res + tuile.getStringTuile());
+        });
+        res.set(res + "------------------");
+        return res.get();
     }
 
     /**
