@@ -27,8 +27,6 @@ public class Main extends Application {
         } catch (IOException e) {
             System.out.println(e);
         }
-
-
     }
 
     public static void main(String[] args) {
